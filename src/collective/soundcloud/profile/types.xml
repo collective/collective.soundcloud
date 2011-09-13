@@ -1,0 +1,3 @@
+<object name="portal_types">
+ <object name="collective.soundcloud.track" meta_type="Dexterity FTI" />
+</object>
