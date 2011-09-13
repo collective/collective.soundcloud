@@ -1,0 +1,37 @@
+<configure
+ xmlns="http://namespaces.zope.org/zope"
+ xmlns:browser="http://namespaces.zope.org/browser"
+ xmlns:i18n="http://namespaces.zope.org/i18n"
+ xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+ i18n_domain="collective.folderorder">
+ 
+    <include package="Products.CMFCore" file="permissions.zcml" />" 
+
+    <genericsetup:registerProfile
+     name="default"
+     title="collective.folderorder"
+     directory="profile"
+     description="provides UI to set alternative order for folders."
+     provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+    <browser:page
+     for="plone.folder.interfaces.IOrderableFolder"
+     name="select_folder_order"
+     permission="cmf.ModifyPortalContent"
+     template="form.pt"
+     class=".form.SelectFolderOrderForm"
+     /> 
+
+    <browser:page
+     for="*"
+     name="is_orderable_folder"
+     permission="zope2.View"
+     class=".action.ActionAvailableView"
+     /> 
+     
+    <adapter 
+     factory=".reversed.ReversedOrdering"
+     name="reversed" />     
+
+</configure>
