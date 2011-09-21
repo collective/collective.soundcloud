@@ -25,6 +25,10 @@ class ITrack(form.Schema):
 @grok.subscribe(ITrack, IObjectAddedEvent)    
 @grok.subscribe(ITrack, IObjectModifiedEvent)    
 def track_lookup_handler(track, event):
+    if not hasattr(track, 'title'):
+        track.title = ''
+    if not hasattr(track, 'description'):
+        track.description = ''
     if not track.soundcloud_track.strip():
         return
     code, msg = validate_track(track.soundcloud_track)
@@ -38,3 +42,13 @@ def track_lookup_handler(track, event):
         return    
     trackdata = sc.tracks(track.soundcloud_track)()
     track.title = trackdata['title']
+    track.description = trackdata['description']
+    
+class View(grok.View):
+    grok.context(ITrack)
+    grok.require('zope2.View')
+    
+    def url(self):
+        url = 'http://player.soundcloud.com/player.swf?'  
+        url += "url=http://api.soundcloud.com/tracks/%s" % self.context.soundcloud_track
+        return url

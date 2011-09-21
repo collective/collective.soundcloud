@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="example.conference">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+        
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription" tal:content="context/description" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <!-- player here -->
+		<object height="81" width="100%"
+		        tal:condition="context/soundcloud_track">
+		  <param 
+		    name="movie" 
+		    tal:attributes="value view/url" />
+		         
+		  <param name="allowscriptaccess" value="always" />
+		  <embed 
+		    src="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
+		    allowscriptaccess="always" height="81"  type="application/x-shockwave-flash" width="100%">
+		  </embed>
+		</object>        
+
+        <p tal:condition="not: context/soundcloud_track">
+           No Track 
+        </p>
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
