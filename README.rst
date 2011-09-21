@@ -1,4 +1,4 @@
-Integartion of Soundcloud in Plone
+Integration of Soundcloud in Plone
 ==================================
 
 !!! work in progress !!!
@@ -27,8 +27,8 @@ The code is located in the
 You can clone it or `get access to the github-collective
 <http://collective.github.com/>`_ and work directly on the project.
 
-Maintainers are Jens Klein, Peter Holzer and the BlueDynamics Alliance 
-developer team. We appreciate any contribution and if a release is needed 
+Maintainers are Jens Klein, Peter Holzer and the BlueDynamics Alliance
+developer team. We appreciate any contribution and if a release is needed
 to be done on pypi, please just contact one of us
 `dev@bluedynamics dot com <mailto:dev@bluedynamics.com>`_
 
