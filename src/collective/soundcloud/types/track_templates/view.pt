@@ -24,11 +24,13 @@
 		<object height="81" width="100%"
 		        tal:condition="context/soundcloud_track">
 		  <param 
-		    name="movie" 
+		    name="movie"
+		    value="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
 		    tal:attributes="value view/url" />
 		         
 		  <param name="allowscriptaccess" value="always" />
-		  <embed 
+		  <embed
+		    tal:attributes="src view/url" 
 		    src="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
 		    allowscriptaccess="always" height="81"  type="application/x-shockwave-flash" width="100%">
 		  </embed>

@@ -1,7 +1,9 @@
 from zope.interface import implementer
 from zope.component import adapter
-from.zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.app.container.interfaces import IObjectAddedEvent
+from.zope.lifecycleevent.interfaces import (
+    IObjectCreatedEvent,
+    IObjectModifiedEvent,
+)    
 from zope import schema
 from zope.i18nmessageid import MessageFactory
 from five import grok
@@ -22,7 +24,7 @@ class ITrack(form.Schema):
             title=_(u"URL or ID of soundcloud item"),
         )         
        
-@grok.subscribe(ITrack, IObjectAddedEvent)    
+@grok.subscribe(ITrack, IObjectCreatedEvent)    
 @grok.subscribe(ITrack, IObjectModifiedEvent)    
 def track_lookup_handler(track, event):
     if not hasattr(track, 'title'):
