@@ -6,6 +6,7 @@
 			 category="Products"
 			 condition_expr=""
 			 url_expr="string:${portal_url}/soundcloud_controlpanel"
+			 icon_expr="string:$portal_url/++resource++collective.soundcloud/icon_listing.png"
 			 visible="True">
     <permission>Manage Portal</permission>
   </configlet>

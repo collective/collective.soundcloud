@@ -5,7 +5,7 @@
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Soundcloud Track</property>
  <property name="description" i18n:translate="">A reference to a soundcloud track</property>
- <property name="icon_expression">string:$portal_url/++resource++collective.soundcloud/icon_track.png</property>
+ <property name="content_icon">++resource++collective.soundcloud/icon_track.png</property>
  <property name="allow_discussion">True</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>
