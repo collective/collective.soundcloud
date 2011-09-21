@@ -1,0 +1,26 @@
+factory: form
+name: soundcloudsettings
+props:
+    action: expr:context.action
+    class: edit-form enableUnloadProtection
+widgets:
+- client_id:
+    factory: field:label:error:text
+    value: expr:context.settings.client_id
+    props:
+        label: Client Id
+        required: Client Id needed.
+- client_secret:
+    factory: field:label:error:text
+    value: expr:context.settings.client_secret
+    props:
+        label: Client Secret
+        required: Client Secret needed.
+- save:
+    factory: submit
+    props:
+        action: save
+        expression: True
+        handler: context.save
+        next: context.next
+        label: Save                                  

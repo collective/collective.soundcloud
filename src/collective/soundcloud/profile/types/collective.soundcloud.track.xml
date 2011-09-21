@@ -5,14 +5,14 @@
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Soundcloud Track</property>
  <property name="description" i18n:translate="">A reference to a soundcloud track</property>
- <property name="content_icon">track.gif</property>
+ <property name="icon_expression">string:$portal_url/++resource++collective.soundcloud/icon_track.png</property>
  <property name="allow_discussion">True</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types" />
  
  <!-- schema interface -->
- <property name="schema">collective.soundcloud.track.ITrack</property> 
+ <property name="schema">collective.soundcloud.types.track.ITrack</property> 
  
  <!-- class used for content items -->
  <property name="klass">plone.dexterity.content.Item</property>

@@ -1,23 +1,11 @@
-from zope.interface import Interface
+from zope.interface import (
+    Interface,
+    Attribute,
+)
 
-class IOAuth2AuthenticationSettings(Interface):
+class ISoundcloudSettings(Interface):
     
-    def getClientId(self):
-        """fetch client id"""
-
-    def setClientId(self, value):
-        """store client id"""
-        
-    def getClientSecret(self):
-        """fetch client secret"""
-        
-    def setClientSecret(self, value):
-        """store client secret"""
-        
-class IOAuth2TokenHandler(Interface):
-    
-    def getToken(self):
-        """fetch token from storage"""
-        
-    def setToken(self, value):
-        """store secret token"""
+    client_id = Attribute(u'OAuth2 client id, provided by soundcloud.com')
+    client_secret = Attribute(u'OAuth2 client secret, provided by '
+                              u'soundcloud.com')
+    token = Attribute(u'OAuth2 authentication token of an user.')

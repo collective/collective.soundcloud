@@ -3,35 +3,25 @@
  xmlns:browser="http://namespaces.zope.org/browser"
  xmlns:i18n="http://namespaces.zope.org/i18n"
  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+ xmlns:grok="http://namespaces.zope.org/grok"
  i18n_domain="collective.folderorder">
  
-    <include package="Products.CMFCore" file="permissions.zcml" />" 
-
+    <includeDependencies package="." />
+    <grok:grok package="." />
+    
+    <include package=".settings" />
+    
     <genericsetup:registerProfile
      name="default"
-     title="collective.folderorder"
+     title="collective.soundcloud"
      directory="profile"
-     description="provides UI to set alternative order for folders."
+     description="Soundcloud Integration for Plone"
      provides="Products.GenericSetup.interfaces.EXTENSION"
     />
-
-    <browser:page
-     for="plone.folder.interfaces.IOrderableFolder"
-     name="select_folder_order"
-     permission="cmf.ModifyPortalContent"
-     template="form.pt"
-     class=".form.SelectFolderOrderForm"
-     /> 
-
-    <browser:page
-     for="*"
-     name="is_orderable_folder"
-     permission="zope2.View"
-     class=".action.ActionAvailableView"
-     /> 
-     
-    <adapter 
-     factory=".reversed.ReversedOrdering"
-     name="reversed" />     
+    
+    <browser:resourceDirectory
+        name="collective.soundcloud"
+        directory="resources"
+        />    
 
 </configure>

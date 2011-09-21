@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0'
+version = '1.0a-dev'
 shortdesc = 'Soundcloud integration for Plone'
 longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()  
 longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()  
@@ -30,10 +30,13 @@ setup(name='collective.soundcloud',
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-            'setuptools',
-            'Plone',
-            'yafowil.zope2',
-            'yafowil.yaml',
+          'setuptools',
+          'Plone',
+          'plone.app.dexterity',
+          'collective.autopermission',            
+          'yafowil.zope2',
+          'yafowil.yaml',
+          'soundcloudapi',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]

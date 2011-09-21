@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/prefs_main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main metal:fill-slot="prefs_configlet_main">
+  <style type="text/css"
+         tal:content="string:#form-ldapsettings label {display:block;}">
+  </style>
+  <h1 i18n:translate="">Soundcloud Configuration</h1>
+    <tal:form replace="structure python:view.form()" />
+    
+  <h1 i18n:translate="">Soundcloud Token</h1>
+  <p>token: <strong tal:content="python:view.settings.token or 'not available'">token</strong></p>
+</metal:main>
+
+</body>
+</html>

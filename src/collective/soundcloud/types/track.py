@@ -7,10 +7,9 @@ _ = MessageFactory("collective.soundcloud")
 
 
 class ITrack(form.Schema):
-    """A soundcloud track. Track can be added anywhere.
+    """A soundcloud track.
     """
     
     title = schema.TextLine(
             title=_(u"Name"),
-        )
-    
+        )     
