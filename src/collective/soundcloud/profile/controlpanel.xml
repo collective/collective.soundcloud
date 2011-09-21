@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <object name="portal_controlpanel">
-  <configlet title="Soundcloud Configuration"
+  <configlet title="Soundcloud"
              action_id="soundcloud_Configuration"
 	  		 appId="collective.soundcloud"
 			 category="Products"

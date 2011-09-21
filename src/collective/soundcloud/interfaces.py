@@ -3,6 +3,9 @@ from zope.interface import (
     Attribute,
 )
 
+class SoundcloudLayer(Interface):
+    """Browserlayer for soundcloud view, resources, etc."""
+
 class ISoundcloudSettings(Interface):
     
     client_id = Attribute(u'OAuth2 client id, provided by soundcloud.com')
