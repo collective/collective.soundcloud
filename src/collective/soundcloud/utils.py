@@ -6,27 +6,53 @@ from soundcloudapi import (
     SoundcloudException,
 ) 
 
-SC_URLMATCH1 = re.compile(r'https?://soundcloud.com/\S+?/\S+?$')
-SC_URLMATCH2 = re.compile(r'https?://soundcloud.com/\S+?/\S+?/{1}?.*$')
+URL_1_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?$')
+URL_2_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?/\S+?$')
+URL_3_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?/\S+?/\S+?$')
+URL_MORE_THAN_2 = re.compile(r'https?://soundcloud.com/\S+?/\S+?/{1}?.*$')
+URL_MORE_THAN_3 = re.compile(r'https?://soundcloud.com/\S+?/\S+?/\S+?/{1}?.*$')
 
 def get_soundcloud_api():
     se = get_soundcloud_settings()
     ai = AuthInfo(se.client_id, client_secret=se.client_secret, token=se.token)
     return Soundcloud(ai)
 
-def validate_track(trackid):
+
+def _validate_url_or_id(scid, name, match, notmatch, fetcher):
     try:
-        # pre-flight - check if valid int
-        int(trackid)
+        int(scid)
     except ValueError:
-        if SC_URLMATCH1.match(trackid) and not SC_URLMATCH2.match(trackid):
-            return -1, 'Track looks like an URL to an track'
-        return 1, 'Track Id is not an integer.' 
-    # flight: api
-    sc = get_soundcloud_api()
+        scid = scid.strip('/')
+        if match.match(scid) and not notmatch.match(scid):
+            sc = get_soundcloud_api()
+            resolvedid = sc.resolve(scid)
+            if resolvedid:
+                # if resolved we believe soundcloud its existence
+                return -1, '%s Id looks like an URL' % name, resolvedid
+            return 1, 'Can not resolve %s URL' % name, None
+        return 1, '%s Id is not an integer nor an valid URL.' % name, None 
     try:
-        track = sc.tracks(trackid)()
-        # XXX error in track?
+        fetcher(scid)()
+        # XXX check error in fetched result?
     except SoundcloudException:        
-        return 2, 'Track Id is not valid according to soundcloud.com.'
-    return 0, 'OK'
+        return 1, '%s Id is not valid according to soundcloud.com.' % name, None
+    return 0, 'OK', None        
+
+
+def validate_user(userid):
+    sc = get_soundcloud_api()    
+    return _validate_url_or_id(userid, 'User', 
+                               URL_1_OR_MORE, URL_2_OR_MORE,
+                               sc.users)
+
+def validate_track(trackid):
+    sc = get_soundcloud_api()    
+    return _validate_url_or_id(trackid, 'Track', 
+                               URL_2_OR_MORE, URL_MORE_THAN_3,
+                               sc.tracks)
+    
+def validate_set(setid):
+    sc = get_soundcloud_api()    
+    return _validate_url_or_id(setid, 'Set', 
+                               URL_3_OR_MORE, URL_MORE_THAN_3,
+                               sc.playlists)    

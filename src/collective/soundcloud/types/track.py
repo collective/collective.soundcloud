@@ -39,6 +39,7 @@ class ITrack(form.Schema):
 @grok.subscribe(ITrack, IObjectModifiedEvent)    
 def track_lookup_handler(track, event):
     sc = get_soundcloud_api()
+    
     track.soundcloud_track = sc.resolve(track.soundcloud_track)
     trackdata = sc.tracks(track.soundcloud_track)()
     track.title = trackdata['title']

@@ -18,7 +18,8 @@ from five import grok
 from plone.directives import form, dexterity
 from collective.soundcloud.utils import (
     get_soundcloud_api,
-    validate_track,
+    validate_user,
+    validate_set,
 )
 
 _ = MessageFactory("collective.soundcloud")
@@ -41,7 +42,7 @@ class IListing(form.Schema):
             required=True,
         )         
 
-    sc_id = schema.TextLine(
+    sc_set = schema.TextLine(
             title=_(u"Set ID or URL"),
             required=False,
         )         
@@ -68,34 +69,47 @@ class IListing(form.Schema):
 
     @invariant
     def validate_listing_type(data):
+        sc = get_soundcloud_api()        
         if data.sc_type == u'user':
             if data.sc_you or data.sc_user:
                 if data.sc_user:
-                    # XXX validate userid
-                    # msg = _('The provided users name or id is not valid')
-                    return            
+                    code, msg, newid = validate_user(data.sc_user)
+                    if code <= 0:
+                        return
+                    msg = _('The provided users url or id is not valid: %s') %\
+                          msg
                 else: 
                     return
             elif data.sc_you and data.sc_user:
                 msg = _('Provide either user or *you*, not both.')
             else: 
-                msg = _('Selected listing type requires an user or *you*')
+                msg = _('Selected listing type requires an User or *you*')
         else:
-            if data.sc_id:
-                # XXX validate set id
-                return
-            msg = _('Selected listing type requires an URL/ID')
+            if data.sc_set:
+                code, msg, newid = validate_set(data.sc_set)
+                if code <= 0:
+                    return
+                msg = _('The provided Set URL or ID is not valid: %s') %\
+                      msg
+            else:
+                msg = _('Selected listing type requires a Set URL/ID')
         raise TypeInvariantInvalid(msg)    
            
            
 @grok.subscribe(IListing, IObjectCreatedEvent)    
 @grok.subscribe(IListing, IObjectModifiedEvent)    
-def track_lookup_handler(listing, event):
-    if not hasattr(listing, 'title'):
-        listing.title = ''
-    if not hasattr(listing, 'description'):
-        listing.description = ''
-    return # XXX
+def listing_lookup_handler(listing, event):
+    if listing.sc_type == 'user':
+        if listing.sc_user:        
+            code, msg, newid = validate_user(listing.sc_user)
+            if code < 0:
+                listing.sc_user = newid
+    else: # type == 'set'
+        code, msg, newid = validate_set(listing.sc_set)
+        if code < 0:            
+            listing.sc_set = newid
+        
+    
     
 #class View(grok.View):
 #    grok.context(IListing)
