@@ -16,32 +16,30 @@ from collective.soundcloud.utils import (
 _ = MessageFactory("collective.soundcloud")
 
 
+def track_validator(value):
+    code, msg = validate_track(value)
+    sc = get_soundcloud_api()
+    if code < 0:
+        value = sc.resolve(value)
+    return code <= 0 and not 'error' in sc.tracks(value)()
+
+
 class ITrack(form.Schema):
     """A soundcloud track.
     """
         
     soundcloud_track = schema.TextLine(
             title=_(u"URL or ID of soundcloud item"),
+            required=True,
+            constraint=track_validator,
         )         
+
        
 @grok.subscribe(ITrack, IObjectCreatedEvent)    
 @grok.subscribe(ITrack, IObjectModifiedEvent)    
 def track_lookup_handler(track, event):
-    if not hasattr(track, 'title'):
-        track.title = ''
-    if not hasattr(track, 'description'):
-        track.description = ''
-    if not track.soundcloud_track.strip():
-        return
-    code, msg = validate_track(track.soundcloud_track)
     sc = get_soundcloud_api()
-    if code < 0:
-        trackid = sc.resolve(track.soundcloud_track)
-        track.soundcloud_track = trackid
-    elif code > 0:
-        track.soundcloud_track = '%s (INVALID: %s)' % (track.soundcloud_track,
-                                                      msg) 
-        return    
+    track.soundcloud_track = sc.resolve(track.soundcloud_track)
     trackdata = sc.tracks(track.soundcloud_track)()
     track.title = trackdata['title']
     track.description = trackdata['description']
