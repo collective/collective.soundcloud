@@ -111,6 +111,16 @@ def listing_lookup_handler(listing, event):
         
     
     
-#class View(grok.View):
-#    grok.context(IListing)
-#    grok.require('zope2.View')
+class View(grok.View):
+    grok.context(IListing)
+    grok.require('zope2.View')
+    
+    @property
+    def is_set(self):
+        return self.context.sc_type == 'set'
+    
+    @property
+    def is_user(self):
+        return self.context.sc_type == 'user'
+    
+        

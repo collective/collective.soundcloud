@@ -48,7 +48,7 @@ def validate_user(userid):
 def validate_track(trackid):
     sc = get_soundcloud_api()    
     return _validate_url_or_id(trackid, 'Track', 
-                               URL_2_OR_MORE, URL_MORE_THAN_3,
+                               URL_2_OR_MORE, URL_MORE_THAN_2,
                                sc.tracks)
     
 def validate_set(setid):
