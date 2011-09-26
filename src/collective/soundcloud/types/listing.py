@@ -18,6 +18,7 @@ from five import grok
 from plone.directives import form, dexterity
 from collective.soundcloud.utils import (
     get_soundcloud_api,
+    player_url,
     validate_user,
     validate_set,
 )
@@ -28,6 +29,8 @@ listing_types = SimpleVocabulary([
      SimpleTerm(value=u'set', title=_(u'Set')),
      SimpleTerm(value=u'user', title=_(u'Tracks of a User')),
 ])
+
+PLAYER = u"http://api.soundcloud.com/tracks/%s"
 
 class TypeInvariantInvalid(Invalid):
     __doc__ = _(u"If type is user either 'you' or a username must be provided.")
@@ -123,4 +126,23 @@ class View(grok.View):
     def is_user(self):
         return self.context.sc_type == 'user'
     
-        
+    def tracks(self):
+        """list of dicts, each dict is a track
+        """
+        tracks = list()
+        sc = get_soundcloud_api()
+        if self.is_set:
+            pass
+        else:
+            if self.context.sc_you:
+                user = sc.me()
+            else:
+                user = sc.users(self.context.sc_user)
+            tracks = user.tracks()            
+        for track in tracks:
+            track[u'player_url'] = player_url(track['id'])
+        return tracks
+    
+    def pprint(self, track):
+        import pprint
+        return pprint.pformat(track)        

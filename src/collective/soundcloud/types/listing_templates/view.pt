@@ -19,8 +19,34 @@
         <p class="documentDescription" tal:content="context/description" />
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
+        
+        <tal:set tal:define="tracks view/tracks">
+          <p tal:condition="not: tracks">No tracks found</p>
+          
+          <div tal:repeat="track tracks">
+          
+            <h2 tal:content="track/title">title</h2> 
 
-        <p>listing is missing here</p>
+            <p class="discreet" tal:content="track/description" />
+         
+	        <!-- player here -->
+	        <object height="81" width="100%">
+	          <param 
+	            name="movie"
+	            value="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
+	            tal:attributes="value track/player_url" />
+	                 
+	          <param name="allowscriptaccess" value="always" />
+	          <embed
+	            tal:attributes="src track/player_url" 
+	            src="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
+	            allowscriptaccess="always" height="81"  type="application/x-shockwave-flash" width="100%">
+	          </embed>
+	        </object>        
+            <pre style="display: None;" class="discreet" tal:content="python:view.pprint(track)">dict</pre>
+        
+          </div>
+        </tal:set>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
 

@@ -10,6 +10,7 @@ from five import grok
 from plone.directives import form, dexterity
 from collective.soundcloud.utils import (
     get_soundcloud_api,
+    player_url,
     validate_track,
 )
 
@@ -17,10 +18,12 @@ _ = MessageFactory("collective.soundcloud")
 
 
 def track_validator(value):
-    code, msg = validate_track(value)
-    sc = get_soundcloud_api()
+    code, msg, newid = validate_track(value)
+    if code > 0:
+        return False
     if code < 0:
-        value = sc.resolve(value)
+        value = newid
+    sc = get_soundcloud_api()
     return code <= 0 and not 'error' in sc.tracks(value)()
 
 
@@ -50,6 +53,4 @@ class View(grok.View):
     grok.require('zope2.View')
     
     def url(self):
-        url = 'http://player.soundcloud.com/player.swf?'  
-        url += "url=http://api.soundcloud.com/tracks/%s" % self.context.soundcloud_track
-        return url
+        return player_url(self.context.soundcloud_track)

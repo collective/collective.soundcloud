@@ -17,6 +17,11 @@ def get_soundcloud_api():
     ai = AuthInfo(se.client_id, client_secret=se.client_secret, token=se.token)
     return Soundcloud(ai)
 
+def player_url(trackid):
+    url = 'http://player.soundcloud.com/player.swf?'  
+    url += "url=http://api.soundcloud.com/tracks/%s" % trackid
+    return url
+
 
 def _validate_url_or_id(scid, name, match, notmatch, fetcher):
     try:
@@ -47,6 +52,7 @@ def validate_user(userid):
 
 def validate_track(trackid):
     sc = get_soundcloud_api()    
+    # XXX buggy, finally we need tests
     return _validate_url_or_id(trackid, 'Track', 
                                URL_2_OR_MORE, URL_MORE_THAN_2,
                                sc.tracks)
