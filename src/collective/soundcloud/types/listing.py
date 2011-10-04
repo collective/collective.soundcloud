@@ -4,7 +4,7 @@ from zope.interface import (
     Invalid,
 )    
 from zope.component import adapter
-from.zope.lifecycleevent.interfaces import (
+from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent,
     IObjectModifiedEvent,
 )    
