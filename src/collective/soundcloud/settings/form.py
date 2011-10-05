@@ -59,7 +59,7 @@ class SoundcloudControlPanel(SoundcloudViewMixin, BrowserView):
         newid = data['client_id'].extracted
         newsec = data['client_secret'].extracted
         if self.settings.client_id == newid \
-           and self. settings.client_secret == newsec:   
+           and self.settings.client_secret == newsec:   
             self.messages.addStatusMessage(_(u'All values unchanged.'), 
                                            type="info")
             return                
