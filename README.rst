@@ -15,6 +15,22 @@ Install it as an addon in Plone control-panel or portal_setup.
 
 This package is written for Plone 4.1 or later.
 
+Configuration
+=============
+
+Soundcloud only gives authentication credentials for domains it can resolve.
+If you are on your local machine, create a dns entry like "local.yourdomain.com" 
+that points to "127.0.0.1"
+
+- Register your app at http://soundcloud.com/you/apps/new
+   - Fill in a name for your app
+   - add http://local.yourdomain.com:8080/Plone/soundcloud_redirect_handler 
+     as your "Redirect URI"
+
+In the soundcloud controlpanel:
+- Enter your client id
+- Enter your client secret
+
 Source Code and Contributions
 =============================
 
