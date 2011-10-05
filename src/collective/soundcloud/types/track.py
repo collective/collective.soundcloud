@@ -1,6 +1,6 @@
 from zope.interface import implementer
 from zope.component import adapter
-from.zope.lifecycleevent.interfaces import (
+from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent,
     IObjectModifiedEvent,
 )    
