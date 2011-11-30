@@ -22,7 +22,7 @@
 
         <!-- player here -->
 		<object height="81" width="100%"
-		        tal:condition="context/soundcloud_track">
+		        tal:condition="context/soundcloud_alias">
 		  <param 
 		    name="movie"
 		    value="http://player.soundcloud.com/player.swf?{ ADD YOUR PARAMETERS HERE }&url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F293" 
@@ -36,7 +36,7 @@
 		  </embed>
 		</object>        
 
-        <p tal:condition="not: context/soundcloud_track">
+        <p tal:condition="not: context/soundcloud_alias">
            No Track 
         </p>
         <div tal:replace="structure provider:plone.belowcontentbody" />

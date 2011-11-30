@@ -17,7 +17,7 @@ from collective.soundcloud.utils import (
 _ = MessageFactory("collective.soundcloud")
 
 
-def track_validator(value):
+def alias_validator(value):
     code, msg, newid = validate_track(value)
     if code > 0:
         return False
@@ -27,30 +27,30 @@ def track_validator(value):
     return code <= 0 and not 'error' in sc.tracks(value)()
 
 
-class ITrack(form.Schema):
-    """A soundcloud track.
+class IAlias(form.Schema):
+    """A soundcloud alias.
     """
         
-    soundcloud_track = schema.TextLine(
+    soundcloud_alias = schema.TextLine(
             title=_(u"URL or ID of soundcloud item"),
             required=True,
-            constraint=track_validator,
+            constraint=alias_validator,
         )         
 
        
-@grok.subscribe(ITrack, IObjectCreatedEvent)    
-@grok.subscribe(ITrack, IObjectModifiedEvent)    
-def track_lookup_handler(track, event):
+@grok.subscribe(IAlias, IObjectCreatedEvent)    
+@grok.subscribe(IAlias, IObjectModifiedEvent)    
+def alias_lookup_handler(alias, event):
     sc = get_soundcloud_api()
     
-    track.soundcloud_track = sc.resolve(track.soundcloud_track)
-    trackdata = sc.tracks(track.soundcloud_track)()
-    track.title = trackdata['title']
-    track.description = trackdata['description']
+    alias.soundcloud_alias = sc.resolve(alias.soundcloud_track)
+    aliasdata = sc.tracks(alias.soundcloud_alias)()
+    alias.title = aliasdata['title']
+    alias.description = aliasdata['description']
     
 class View(grok.View):
-    grok.context(ITrack)
+    grok.context(IAlias)
     grok.require('zope2.View')
     
     def url(self):
-        return player_url(self.context.soundcloud_track)
+        return player_url(self.context.soundcloud_alias)

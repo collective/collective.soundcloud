@@ -4,7 +4,7 @@ from soundcloudapi import (
     AuthInfo, 
     Soundcloud,
     SoundcloudException,
-) 
+)
 
 URL_1_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?$')
 URL_2_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?/\S+?$')
