@@ -3,8 +3,8 @@
    i18n:domain="collective.soundcloud" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
- <property name="title" i18n:translate="">Soundcloud Track</property>
- <property name="description" i18n:translate="">A reference to a soundcloud track</property>
+ <property name="title" i18n:translate="">Soundcloud Alias</property>
+ <property name="description" i18n:translate="">A alias to a soundcloud track</property>
  <property name="content_icon">++resource++collective.soundcloud/icon_track.png</property>
  <property name="allow_discussion">True</property>
  <property name="global_allow">True</property>
@@ -12,7 +12,7 @@
  <property name="allowed_content_types" />
  
  <!-- schema interface -->
- <property name="schema">collective.soundcloud.types.track.ITrack</property> 
+ <property name="schema">collective.soundcloud.types.alias.IAlias</property> 
  
  <!-- class used for content items -->
  <property name="klass">plone.dexterity.content.Item</property>

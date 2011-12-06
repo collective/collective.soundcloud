@@ -4,16 +4,14 @@
     i18n_domain="collective.soundcloud">
 
   <include package="Products.CMFCore" />
-  
-<!-- 
+
   <browser:page
-    name="soundcloud_controlpanel"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    layer="collective.soudncloud.interfaces.SoundcloudLayer"    
-    class=".form.SoundcloudControlPanel"
+    name="soundcloud_add"
+    for="*"
+    layer="collective.soundcloud.interfaces.SoundcloudLayer"    
+    class=".form.SoundcloudAddEdit"
     template="form.pt"
     permission="cmf.ManagePortal"
   />
- -->
 
 </configure>
