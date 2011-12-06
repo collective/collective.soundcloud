@@ -31,7 +31,7 @@ class IAlias(form.Schema):
     """A soundcloud alias.
     """
         
-    soundcloud_alias = schema.TextLine(
+    soundcloud_id = schema.TextLine(
             title=_(u"URL or ID of soundcloud item"),
             required=True,
             constraint=alias_validator,
@@ -43,8 +43,8 @@ class IAlias(form.Schema):
 def alias_lookup_handler(alias, event):
     sc = get_soundcloud_api()
     
-    alias.soundcloud_alias = sc.resolve(alias.soundcloud_track)
-    aliasdata = sc.tracks(alias.soundcloud_alias)()
+    alias.soundcloud_id = sc.resolve(alias.soundcloud_id)
+    aliasdata = sc.tracks(alias.soundcloud_id)()
     alias.title = aliasdata['title']
     alias.description = aliasdata['description']
     
@@ -53,4 +53,4 @@ class View(grok.View):
     grok.require('zope2.View')
     
     def url(self):
-        return player_url(self.context.soundcloud_alias)
+        return player_url(self.context.soundcloud_id)

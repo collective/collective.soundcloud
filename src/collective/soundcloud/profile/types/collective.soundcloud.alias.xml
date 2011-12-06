@@ -5,7 +5,7 @@
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Soundcloud Alias</property>
  <property name="description" i18n:translate="">A alias to a soundcloud track</property>
- <property name="content_icon">++resource++collective.soundcloud/icon_track.png</property>
+ <property name="content_icon">++resource++collective.soundcloud/icon_alias.png</property>
  <property name="allow_discussion">True</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>

@@ -7,15 +7,16 @@
  i18n_domain="collective.soundcloud">
  
     <includeDependencies package="." />
+
     <grok:grok package="." />
     
     <include package=".settings" />
     
     <genericsetup:registerProfile
      name="default"
-     title="collective.soundcloud"
+     title="Soundcloud Support"
      directory="profile"
-     description="Soundcloud Integration for Plone"
+     description="collective.soundcloud itegrates Plone with soundcloud.com"
      provides="Products.GenericSetup.interfaces.EXTENSION"
     />
     

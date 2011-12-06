@@ -45,15 +45,11 @@ class IListing(form.Schema):
             required=True,
         )         
 
-    sc_set = schema.TextLine(
-            title=_(u"Set ID or URL"),
+    sc_id = schema.TextLine(
+            title=_(u"ID or URL"),
             required=False,
         )         
-
-    sc_user = schema.TextLine(
-            title=_(u"User ID or URL"),
-            required=False,
-        )         
+        
 
     sc_you = schema.Bool(
             title=_(u"You"),
@@ -74,28 +70,28 @@ class IListing(form.Schema):
     def validate_listing_type(data):
         sc = get_soundcloud_api()        
         if data.sc_type == u'user':
-            if data.sc_you or data.sc_user:
-                if data.sc_user:
-                    code, msg, newid = validate_user(data.sc_user)
+            if data.sc_you or data.sc_id:
+                if data.sc_id:
+                    code, msg, newid = validate_user(data.sc_id)
                     if code <= 0:
                         return
-                    msg = _('The provided users url or id is not valid: %s') %\
+                    msg = _('The provided users URL or ID is not valid: %s') %\
                           msg
                 else: 
                     return
-            elif data.sc_you and data.sc_user:
-                msg = _('Provide either user or *you*, not both.')
+            elif data.sc_you and data.sc_id:
+                msg = _('Provide either user URL or ID or *you*, not both.')
             else: 
-                msg = _('Selected listing type requires an User or *you*')
+                msg = _('User listing type requires an User or *you*')
         else:
-            if data.sc_set:
-                code, msg, newid = validate_set(data.sc_set)
+            if data.sc_id:
+                code, msg, newid = validate_set(data.sc_id)
                 if code <= 0:
                     return
                 msg = _('The provided Set URL or ID is not valid: %s') %\
                       msg
             else:
-                msg = _('Selected listing type requires a Set URL/ID')
+                msg = _('Set listing type requires a Set URL/ID')
         raise TypeInvariantInvalid(msg)    
            
            
@@ -103,16 +99,15 @@ class IListing(form.Schema):
 @grok.subscribe(IListing, IObjectModifiedEvent)    
 def listing_lookup_handler(listing, event):
     if listing.sc_type == 'user':
-        if listing.sc_user:        
-            code, msg, newid = validate_user(listing.sc_user)
+        if listing.sc_id:        
+            code, msg, newid = validate_user(listing.sc_id)
             if code < 0:
-                listing.sc_user = newid
+                listing.sc_id = newid
     else: # type == 'set'
-        code, msg, newid = validate_set(listing.sc_set)
+        code, msg, newid = validate_set(listing.sc_id)
         if code < 0:            
-            listing.sc_set = newid
-        
-    
+            listing.sc_id = newid
+
     
 class View(grok.View):
     grok.context(IListing)
@@ -132,13 +127,14 @@ class View(grok.View):
         tracks = list()
         sc = get_soundcloud_api()
         if self.is_set:
-            pass
+            scset = sc.playlists(self.context.sc_id)
+            tracks = scset()['tracks']
         else:
             if self.context.sc_you:
                 user = sc.me()
             else:
-                user = sc.users(self.context.sc_user)
-            tracks = user.tracks()            
+                user = sc.users(self.context.sc_id)
+            tracks = user.tracks()
         for track in tracks:
             track[u'player_url'] = player_url(track['id'])
         return tracks

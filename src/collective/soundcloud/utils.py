@@ -37,7 +37,7 @@ def _validate_url_or_id(scid, name, match, notmatch, fetcher):
             return 1, 'Can not resolve %s URL' % name, None
         return 1, '%s Id is not an integer nor an valid URL.' % name, None 
     try:
-        fetcher(scid)()
+        fetcher(scid)
         # XXX check error in fetched result?
     except SoundcloudException:        
         return 1, '%s Id is not valid according to soundcloud.com.' % name, None
