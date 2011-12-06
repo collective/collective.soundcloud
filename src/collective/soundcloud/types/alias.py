@@ -1,10 +1,10 @@
 from zope.interface import implementer
 from zope.component import adapter
+from zope import schema
 from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent,
     IObjectModifiedEvent,
 )    
-from zope import schema
 from zope.i18nmessageid import MessageFactory
 from five import grok
 from plone.directives import form, dexterity
@@ -13,9 +13,9 @@ from collective.soundcloud.utils import (
     player_url,
     validate_track,
 )
+from collective.soundcloud.interfaces import ISoundcloudItem
 
 _ = MessageFactory("collective.soundcloud")
-
 
 def alias_validator(value):
     code, msg, newid = validate_track(value)
@@ -24,10 +24,10 @@ def alias_validator(value):
     if code < 0:
         value = newid
     sc = get_soundcloud_api()
-    return code <= 0 and not 'error' in sc.tracks(value)()
+    return code <= 0 and not 'error' in sc.tracks(value)()       
 
 
-class IAlias(form.Schema):
+class IAlias(form.Schema, ISoundcloudItem):
     """A soundcloud alias.
     """
         
@@ -35,7 +35,7 @@ class IAlias(form.Schema):
             title=_(u"URL or ID of soundcloud item"),
             required=True,
             constraint=alias_validator,
-        )         
+        )      
 
        
 @grok.subscribe(IAlias, IObjectCreatedEvent)    

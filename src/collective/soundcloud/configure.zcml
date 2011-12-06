@@ -25,5 +25,10 @@
         directory="resources"
         layer="collective.soundcloud.interfaces.SoundcloudLayer"
         />    
+        
+    <adapter
+        for="* zope.publisher.interfaces.http.IHTTPRequest"
+        factory=".traverser.TrackTraverser"
+        name="soundcloud-track" />        
 
 </configure>
