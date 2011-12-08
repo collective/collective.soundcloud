@@ -44,9 +44,7 @@ def alias_lookup_handler(alias, event):
     sc = get_soundcloud_api()
     
     alias.soundcloud_id = sc.resolve(alias.soundcloud_id)
-    aliasdata = sc.tracks(alias.soundcloud_id)()
-    alias.title = aliasdata['title']
-    alias.description = aliasdata['description']
+    alias.trackdata = sc.tracks(alias.soundcloud_id)()    
     
 class View(grok.View):
     grok.context(IAlias)

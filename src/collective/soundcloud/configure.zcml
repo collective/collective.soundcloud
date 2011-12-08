@@ -26,9 +26,26 @@
         layer="collective.soundcloud.interfaces.SoundcloudLayer"
         />    
         
+<!--        
     <adapter
-        for="* zope.publisher.interfaces.http.IHTTPRequest"
+        for="Products.Archetypes.interfaces.IBaseObject
+            zope.publisher.interfaces.http.IHTTPRequest"
+        factory=".fieldtraverser.FieldTraverser"
+        name="atfield" />
+-->                
+    <adapter    
+        for="plone.dexterity.interfaces.IDexterityContent 
+             zope.publisher.interfaces.http.IHTTPRequest"
         factory=".traverser.TrackTraverser"
-        name="soundcloud-track" />        
+        name="soundcloud" />
+        
+    <browser:page
+	    name="view"
+	    for=".interfaces.ISoundcloudPublisher"
+	    layer="collective.soundcloud.interfaces.SoundcloudLayer"
+	    class=".types.alias.View"
+	    template="types/alias_templates/view.pt"
+	    permission="zope2.View"
+    />     
 
 </configure>
