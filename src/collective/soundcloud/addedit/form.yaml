@@ -6,16 +6,19 @@ props:
 widgets:
 - title:
     factory: field:label:error:text
-    value: expr:context.settings.client_id
+    value: expr:context.trackdata['title']
     props:
         label: Title
         required: Title needed.
 - description:
     factory: field:label:error:text
-    value: expr:context.settings.client_secret
+    value: expr:context.trackdata['description']
     props:
         label: Description
-        required: Client Secret needed.
+- soundfile:
+    factory: field:label:file
+    props:
+        label: Soundfile
 - save:
     factory: submit
     props:

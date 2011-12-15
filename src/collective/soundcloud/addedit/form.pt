@@ -4,19 +4,12 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="gmaplocation">
+      i18n:domain="collective.soundcloud">
       
-<head>
-  <metal:slot fill-slot="head_slot">
-    <tal:script replace="structure provider:collective.gmaplocation.resources" />
-  </metal:slot>
-</head>      
-
 <body>
 
     <metal:content-core fill-slot="content-core">
-        <metal:block define-macro="content-core"
-                     tal:define="content_type context/get_content_type|context/Format">
+        <metal:block define-macro="content-core">
 
             <tal:form replace="structure python:view.form()" />
             

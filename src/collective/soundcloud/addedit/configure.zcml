@@ -6,12 +6,12 @@
   <include package="Products.CMFCore" />
 
   <browser:page
-    name="soundcloud_add"
+    name="soundcloud_modifier"
     for="*"
     layer="collective.soundcloud.interfaces.SoundcloudLayer"    
     class=".form.SoundcloudAddEdit"
     template="form.pt"
-    permission="cmf.ManagePortal"
+    permission="cmf.ModifyPortalContent"
   />
 
 </configure>
