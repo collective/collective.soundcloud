@@ -27,7 +27,7 @@ def _validate_url_or_id(scid, name, match, notmatch, fetcher):
     try:
         int(scid)
     except TypeError:
-        return 1, 'Input type given is not valid.'
+        return 1, 'Input type given is not valid.', None
     except ValueError:
         scid = scid.strip('/')
         if match.match(scid) and not notmatch.match(scid):
