@@ -26,7 +26,9 @@ def player_url(trackid):
 def _validate_url_or_id(scid, name, match, notmatch, fetcher):
     try:
         int(scid)
-    except (ValueError, TypeError):
+    except TypeError:
+        return 1, 'Input type given is not valid.'
+    except ValueError:
         scid = scid.strip('/')
         if match.match(scid) and not notmatch.match(scid):
             sc = get_soundcloud_api()
