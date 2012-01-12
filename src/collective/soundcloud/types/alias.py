@@ -41,5 +41,5 @@ def alias_lookup_handler(alias, event):
     
 class View(BrowserView):
     
-    def url(self):
-        return player_url(self.context.soundcloud_id)
+    def track(self):
+        return self.context.trackdata
