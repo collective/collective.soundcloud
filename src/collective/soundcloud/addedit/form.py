@@ -18,6 +18,33 @@ DEFAULTS = {
     'asset_data': UNSET,
 }  
 
+VOCAB_TRACK_TYPES = [
+    "original",
+    "remix",
+    "live",
+    "recording",
+    "spoken",
+    "podcast",
+    "demo",
+    "in progress",
+    "stem",
+    "loop",
+    "sound effect",
+    "sample",
+    "other",
+]
+
+VOCAB_LICENSES = [
+    "no-rights-reserved",
+    "all-rights-reserved",
+    "cc-by",
+    "cc-by-nc",
+    "cc-by-nd",
+    "cc-by-sa",
+    "cc-by-nc-nd",
+    "cc-by-nc-sa",
+]
+
 class SoundcloudAddEdit(BrowserView):    
     
     def form(self):
@@ -58,3 +85,11 @@ class SoundcloudAddEdit(BrowserView):
         if self.mode == EDIT:
             self.context.trackdata = trackdata
         self.soundcloud_id = trackdata
+        
+    @property
+    def vocab_track_types(self):        
+        return VOCAB_TRACK_TYPES
+    
+    @property
+    def vocab_licenses(self):
+        return VOCAB_LICENSES

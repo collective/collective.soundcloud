@@ -1,13 +1,9 @@
 from zope.interface import implementer
 from zope.component import adapter
 from zope import schema
-from zope.lifecycleevent.interfaces import (
-    IObjectCreatedEvent,
-    IObjectModifiedEvent,
-)    
 from zope.i18nmessageid import MessageFactory
-from five import grok
 from plone.directives import form, dexterity
+from zope.publisher.browser import BrowserView
 from collective.soundcloud.utils import (
     get_soundcloud_api,
     player_url,
@@ -36,19 +32,14 @@ class IAlias(form.Schema, ISoundcloudItem):
             required=True,
             constraint=alias_validator,
         )      
-
-       
-@grok.subscribe(IAlias, IObjectCreatedEvent)    
-@grok.subscribe(IAlias, IObjectModifiedEvent)    
+   
 def alias_lookup_handler(alias, event):
     sc = get_soundcloud_api()
     
     alias.soundcloud_id = sc.resolve(alias.soundcloud_id)
     alias.trackdata = sc.tracks(alias.soundcloud_id)()    
     
-class View(grok.View):
-    grok.context(IAlias)
-    grok.require('zope2.View')
+class View(BrowserView):
     
     def url(self):
         return player_url(self.context.soundcloud_id)

@@ -19,6 +19,29 @@ widgets:
     factory: field:label:file
     props:
         label: Soundfile
+- track_type:
+    factory: field:label:error:selection
+    value: expr:context.trackdata['track_type']
+    vocabulary: expr:context.vocab_track_types
+    props:
+        label: Track Type
+- genres:
+    factory: field:label:error:text
+    value: expr:context.trackdata['genre']
+    props:
+        label: Genre
+- tags:
+    factory: field:label:error:text
+    value: expr:context.trackdata['tags']
+    props:
+        label: Tags
+- track_type:
+    factory: field:label:error:selection
+    value: expr:context.trackdata['license']
+    vocabulary: expr:context.vocab_license
+    props:
+        label: License
+
 - save:
     factory: submit
     props:

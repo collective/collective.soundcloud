@@ -3,15 +3,13 @@
  xmlns:browser="http://namespaces.zope.org/browser"
  xmlns:i18n="http://namespaces.zope.org/i18n"
  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
- xmlns:grok="http://namespaces.zope.org/grok"
  i18n_domain="collective.soundcloud">
  
     <includeDependencies package="." />
   
     <include package=".settings" />
     <include package=".addedit" />
-
-    <grok:grok package=".types" />
+    <include package=".types" />
     
     <genericsetup:registerProfile
      name="default"
@@ -38,7 +36,7 @@
 	    for=".interfaces.ISoundcloudPublisher"
 	    layer="collective.soundcloud.interfaces.SoundcloudLayer"
 	    class=".types.alias.View"
-	    template="types/alias_templates/view.pt"
+	    template="types/alias.pt"
 	    permission="zope2.View"
     />     
 

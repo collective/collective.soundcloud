@@ -3,18 +3,14 @@ from zope.interface import (
     invariant, 
     Invalid,
 )    
-from zope.component import adapter
-from zope.lifecycleevent.interfaces import (
-    IObjectCreatedEvent,
-    IObjectModifiedEvent,
-)    
+from zope.component import adapter 
 from zope import schema
 from zope.schema.vocabulary import (
     SimpleVocabulary, 
     SimpleTerm,
 )
+from zope.publisher.browser import BrowserView
 from zope.i18nmessageid import MessageFactory
-from five import grok
 from plone.directives import form, dexterity
 from collective.soundcloud.utils import (
     get_soundcloud_api,
@@ -94,9 +90,7 @@ class IListing(form.Schema):
                 msg = _('Set listing type requires a Set URL/ID')
         raise TypeInvariantInvalid(msg)    
            
-           
-@grok.subscribe(IListing, IObjectCreatedEvent)    
-@grok.subscribe(IListing, IObjectModifiedEvent)    
+
 def listing_lookup_handler(listing, event):
     if listing.sc_type == 'user':
         if listing.sc_id:        
@@ -109,9 +103,7 @@ def listing_lookup_handler(listing, event):
             listing.sc_id = newid
 
     
-class View(grok.View):
-    grok.context(IListing)
-    grok.require('zope2.View')
+class View(BrowserView):
     
     @property
     def is_set(self):

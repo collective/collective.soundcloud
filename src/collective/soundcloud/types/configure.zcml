@@ -1,0 +1,45 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.soundcloud">
+
+  <!-- ALIAS -->
+  <subscriber 
+     for="collective.soundcloud.types.alias.IAlias
+          zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+     handler=".alias.alias_lookup_handler" />
+     
+  <subscriber 
+     for="collective.soundcloud.types.alias.IAlias
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     handler=".alias.alias_lookup_handler" />
+     
+  <browser:page
+    name="view"
+    for=".alias.IAlias"
+    layer="collective.soundcloud.interfaces.SoundcloudLayer"    
+    class=".alias.View"
+    template="alias.pt"
+    permission="zope2.View"
+  />  
+
+  <!-- LISTING -->
+  <subscriber 
+     for="collective.soundcloud.types.listing.IListing
+          zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+     handler=".listing.listing_lookup_handler" />
+     
+  <subscriber 
+     for="collective.soundcloud.types.alias.IAlias
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     handler=".listing.listing_lookup_handler" />
+     
+  <browser:page
+    name="view"
+    for=".listing.IListing"
+    layer="collective.soundcloud.interfaces.SoundcloudLayer"    
+    class=".listing.View"
+    template="listing.pt"
+    permission="zope2.View"
+  />            
+</configure>
