@@ -11,36 +11,52 @@ widgets:
         label: Title
         required: Title needed.
 - description:
-    factory: field:label:error:text
+    factory: field:label:error:textarea
     value: expr:context.trackdata['description']
     props:
         label: Description
-- soundfile:
+        help: describe the sound
+        help_class: formHelp
+        rows: 5
+- asset_data:
     factory: field:label:file
+    value: expr:context.trackdata['asset_data']
     props:
-        label: Soundfile
+        label: Sound Asset
+        vocabulary: expr:context.vocab_fileopts
+        help: sound in a format accepted by soundcloud
+        help_class: formHelp
+        required: No sound without a file.        
 - track_type:
-    factory: field:label:error:selection
+    factory: field:label:error:select
     value: expr:context.trackdata['track_type']
-    vocabulary: expr:context.vocab_track_types
     props:
         label: Track Type
-- genres:
+        vocabulary: expr:context.vocab_track_types
+        help: select one of the types
+        help_class: formHelp
+- genre:
     factory: field:label:error:text
     value: expr:context.trackdata['genre']
     props:
         label: Genre
-- tags:
+        help: select one genre
+        help_class: formHelp
+- tag_list:
     factory: field:label:error:text
-    value: expr:context.trackdata['tags']
+    value: expr:context.trackdata['tag_list']
     props:
         label: Tags
-- track_type:
-    factory: field:label:error:selection
+        help: Separate with spaces or use quotation marks (e.g. "spoken word")
+        help_class: formHelp
+- license:
+    factory: field:label:error:select
     value: expr:context.trackdata['license']
-    vocabulary: expr:context.vocab_license
     props:
         label: License
+        vocabulary: expr:context.vocab_licenses
+        help: select one of the licenses
+        help_class: formHelp
 
 - save:
     factory: submit
