@@ -1,5 +1,6 @@
 import copy
 from restkit import RequestError
+from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zExceptions import Unauthorized
 from Products.Five import BrowserView
@@ -9,6 +10,10 @@ from yafowil.controller import Controller
 from yafowil.yaml import parse_from_YAML
 from collective.soundcloud.interfaces import ISoundcloudItem
 from collective.soundcloud.utils import get_soundcloud_api
+from collective.soundcloud.events import (
+    SoundcloudCreatedEvent,
+    SoundcloudModifedEvent
+)
 
 _ = MessageFactory('collective.soundcloud')
 
@@ -96,7 +101,7 @@ class SoundcloudAddEdit(BrowserView):
 
     @property
     def action(self):
-        if self.mode == EDIT:
+        if self.mode == EDIT and not ISoundcloudItem.providedBy(self.context):
             url = '%s/++soundcloud++%s' % (self.context.absolute_url(), 
                                            self.soundcloud_id)
         else:
@@ -134,8 +139,12 @@ class SoundcloudAddEdit(BrowserView):
             raise
         if self.mode == EDIT:
             self.context.trackdata = trackdata
-        self.soundcloud_id = trackdata['id']
-        
+            self.soundcloud_id = trackdata['id']
+            notify(SoundcloudModifiedEvent(self.context))
+        else:
+            obj = TrackItem(trackdata['id']).__of__(self.context)
+            notify(SoundcloudAddedEvent(obj))
+
     @property
     def vocab_track_types(self):        
         return VOCAB_TRACK_TYPES
