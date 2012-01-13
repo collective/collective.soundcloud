@@ -7,7 +7,7 @@
 
   <browser:page
     name="soundcloud_edit"
-    for="collective.soundcloud.interfaces.ISoundcloudPublisher"
+    for="collective.soundcloud.interfaces.ISoundcloudItem"
     layer="collective.soundcloud.interfaces.SoundcloudLayer"    
     class=".form.SoundcloudAddEdit"
     template="form.pt"

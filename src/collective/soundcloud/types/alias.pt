@@ -11,9 +11,11 @@
     <tal:main-macro metal:define-macro="main">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
+        
+        <pre tal:content="context/trackdata"></pre><!-- 
 
         <h1 class="documentFirstHeading" 
-            tal:content="context/trackdata/title" />
+            tal:content="python:context.trackdata['title']" />
         
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
@@ -21,8 +23,8 @@
            tal:content="context/trackdata/description" />
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
-
-        <!-- player here -->
+ -->
+        <!-- player here 
         <iframe class="soundcloudPlayer" width="100%" height="166" scrolling="no" frameborder="no" src=""
          tal:attributes="src python:'http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F' + \
                                      str(view.track()['id']) + '&amp;auto_play=false&amp;show_artwork=false&amp;color=ff7700&amp;'"></iframe>
@@ -31,7 +33,7 @@
            No Track 
         </p>
         <div tal:replace="structure provider:plone.belowcontentbody" />
-
+-->
     </tal:main-macro>
 </metal:main>
 

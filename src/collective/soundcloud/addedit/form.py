@@ -134,16 +134,19 @@ class SoundcloudAddEdit(BrowserView):
         except RequestError:
             # TODO Error handling
             raise
+        self.trackdata = trackdata
+        self.soundcloud_id = trackdata['id']
         if self.mode == EDIT:
             self.context.trackdata = trackdata
-            self.soundcloud_id = trackdata['id']
+            self.context.soundcloud_id = trackdata['id']
             notify(SoundcloudModifiedEvent(self.context))
         else:
-            if not ISoundcloudItem.providedBy(self.context):
-                self.context = TrackItem(trackdata['id']).__of__(self.context)
-            else:
-                self.context.trackdata = trackdata
+            if ISoundcloudItem.providedBy(self.context):
+                setattr(self.context, 'trackdata', trackdata)
+                setattr(self.context, 'soundcloud_id', trackdata['id'])
                 self.soundcloud_id = trackdata['id']                
+            else:
+                self.context = TrackItem(trackdata['id']).__of__(self.context)
             notify(SoundcloudCreatedEvent(self.context))
 
     @property

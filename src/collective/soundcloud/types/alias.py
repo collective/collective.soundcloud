@@ -10,6 +10,7 @@ from collective.soundcloud.utils import (
     validate_track,
 )
 from collective.soundcloud.interfaces import ISoundcloudItem
+from collective.soundcloud.events import ISoundcloudModifiedEvent
 
 _ = MessageFactory("collective.soundcloud")
 
@@ -34,10 +35,12 @@ class IAlias(form.Schema, ISoundcloudItem):
         )      
    
 def alias_lookup_handler(alias, event):
+    if ISoundcloudModifiedEvent.providedBy(event):
+        # hack, sigh
+        return
     sc = get_soundcloud_api()
-    
     alias.soundcloud_id = sc.resolve(alias.soundcloud_id)
-    alias.trackdata = sc.tracks(alias.soundcloud_id)()    
+    alias.trackdata = sc.tracks(alias.soundcloud_id)()     
     
 class View(BrowserView):
     
