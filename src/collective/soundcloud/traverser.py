@@ -14,15 +14,13 @@ from plone.memoize import ram
 
 def _cachekey_fetch_track(method, self):
     # TODO: make the caching timeout configurable 
-    return (self.soundcloud_id, time.time() // 3600)
+    return (self.soundcloud_id, time.time() // 300)
 
 class TrackItem(Implicit, Item):
     
     implements(ISoundcloudPublisher)
     
-    def __init__(self, context, request, scid):
-        self.context = context
-        self.request = request
+    def __init__(self, scid):
         if not scid:
             raise TraversalException()
         self.soundcloud_id = scid
@@ -50,5 +48,5 @@ class TrackTraverser(object):
         self.request = request
 
     def traverse(self, scid, subpath):
-        return TrackItem(self.context, self.request, scid).__of__(self.context)
+        return TrackItem(scid).__of__(self.context)
 
