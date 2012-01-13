@@ -77,10 +77,12 @@ class SoundcloudAddEdit(BrowserView):
     def form(self):
         self.mode = ADD        
         self.trackdata = dict(DEFAULTS)
+        self.soundcloud_id = None
         if ISoundcloudItem.providedBy(self.context):
             self.mode = EDIT
             self.trackdata = copy.deepcopy(self.context.trackdata)
             self.trackdata['asset_data'] = FILEMARKER
+            self.soundcloud_id = self.trackdata['id']
         form = parse_from_YAML('collective.soundcloud.addedit:form.yaml',
                                self,  _)        
         controller = Controller(form, self.request)
@@ -94,7 +96,7 @@ class SoundcloudAddEdit(BrowserView):
 
     @property
     def action(self):
-        if self.mode == 'EDIT':
+        if self.mode == EDIT:
             url = '%s/++soundcloud++%s' % (self.context.absolute_url(), 
                                            self.soundcloud_id)
         else:
@@ -125,7 +127,6 @@ class SoundcloudAddEdit(BrowserView):
             tracks = sc.tracks(self.context.trackdata['id']) 
         else:
             tracks = sc.tracks()     
-        #import pdb;pdb.set_trace()
         try:
             trackdata = tracks(upload_track_data)
         except RequestError:
