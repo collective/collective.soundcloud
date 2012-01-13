@@ -10,6 +10,7 @@ from yafowil.controller import Controller
 from yafowil.yaml import parse_from_YAML
 from collective.soundcloud.interfaces import ISoundcloudItem
 from collective.soundcloud.utils import get_soundcloud_api
+from collective.soundcloud.traverser import TrackItem
 from collective.soundcloud.events import (
     SoundcloudCreatedEvent,
     SoundcloudModifiedEvent
@@ -96,17 +97,13 @@ class SoundcloudAddEdit(BrowserView):
         self.request.RESPONSE.redirect(controller.next)
             
     def next(self, request):
-        return '%s/++soundcloud++%s' % (self.context.absolute_url(), 
-                                        self.soundcloud_id)
+        return self.context.absolute_url()
 
     @property
     def action(self):
-        if self.mode == EDIT and not ISoundcloudItem.providedBy(self.context):
-            url = '%s/++soundcloud++%s' % (self.context.absolute_url(), 
-                                           self.soundcloud_id)
-        else:
-            url = self.context.absolute_url() 
-        return '%s/@@soundcloud_modifier' % url
+        postfix = self.mode == ADD and 'add' or 'edit'
+        url = self.context.absolute_url()
+        return '%s/@@soundcloud_%s' % (url, postfix)
     
     def save(self, widget, data):
         if self.request.method != 'POST':
@@ -142,8 +139,9 @@ class SoundcloudAddEdit(BrowserView):
             self.soundcloud_id = trackdata['id']
             notify(SoundcloudModifiedEvent(self.context))
         else:
-            obj = TrackItem(trackdata['id']).__of__(self.context)
-            notify(SoundcloudAddedEvent(obj))
+            if not ISoundcloudItem.providedBy(self.context):
+                self.context = TrackItem(trackdata['id']).__of__(self.context)
+            notify(SoundcloudCreatedEvent(self.context))
 
     @property
     def vocab_track_types(self):        
