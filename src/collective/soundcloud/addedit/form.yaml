@@ -57,7 +57,99 @@ widgets:
         vocabulary: expr:context.vocab_licenses
         help: select one of the licenses
         help_class: formHelp
-
+- label_name:
+    factory: field:label:error:text
+    value: expr:context.trackdata['label_name']
+    props:
+        label: Label
+        help: name of the label
+        help_class: formHelp
+- release_date:
+    factory: field:label:compound
+    value: unused
+    props:
+        label: Release Date
+        help: date of the release, format is YEAR MONTH DAY
+        help_class: formHelp
+        structural: 1 
+    widgets:
+    - release_year:
+        factory: error:number
+        value: expr:context.trackdata['release_year']
+        props:
+            size: 4
+            datatype: integer
+            min: expr:1800
+            max: expr:2100
+    - release_month:
+        factory: error:number
+        value: expr:context.trackdata['release_month']
+        props:
+            size: 2
+            datatype: integer
+            min: expr:1
+            max: expr:12
+    - release_day:
+        factory: error:number
+        value: expr:context.trackdata['release_day']
+        props:
+            size: 2
+            datatype: integer
+            min: expr:1
+        
+            max: expr:31
+- release:
+    factory: field:label:error:text
+    value: expr:context.trackdata['release']
+    props:
+        label: Release/catalogue number
+        help: number of the release in (your) catalog
+        help_class: formHelp   
+- isrc:
+    factory: field:label:error:text
+    value: expr:context.trackdata['isrc']
+    props:
+        label: ISRC
+        help: The International Standard Recording Code (ISRC) is an international standard code for uniquely identifying sound and music video recordings. ISRC's are used by distributors, download sites, retailers and labels to manage digital repertoire. Format is CC-XXX-YY-NNNNN 
+        help_class: formHelp   
+- bpm:
+    factory: field:label:error:number
+    value: expr:context.trackdata['bpm']
+    props:
+        label: BPM
+        help: beats per minute 
+        help_class: formHelp   
+        datatype: float
+        min: expr:1
+- key_signature:
+    factory: field:label:error:text
+    value: expr:context.trackdata['key_signature']
+    props:
+        label: Keys
+        help: track key, i.e. Cmaj
+        help_class: formHelp         
+- purchase_url:
+    factory: field:label:error:text
+    value: expr:context.trackdata['purchase_url']
+    props:
+        label: Buy Link
+        help: purchase URL, i.e. http://amazon.com/buy/a46aj0c03
+        help_class: formHelp         
+- video_url:
+    factory: field:label:error:text
+    value: expr:context.trackdata['video_url']
+    props:
+        label: Video Link
+        help: Youtube, Vimeo, Dailymotion and Viddler videos will appear in an on-site player
+        help_class: formHelp
+- sharing:
+    factory: field:label:error:select
+    value: expr:context.trackdata['sharing']
+    props:
+        label: Permissions
+        help: Share public to everyone or private for you only?
+        help_class: formHelp    
+        vocabulary: expr:context.vocab_sharing        
 - save:
     factory: submit
     props:

@@ -22,6 +22,17 @@ DEFAULTS = {
     'genre': UNSET,
     'tag_list': "",
     'license': 'all-rights-reserved',
+    'label_name': UNSET,
+    'release_year': UNSET,
+    'release_month': UNSET,
+    'release_day': UNSET,
+    'release': UNSET,
+    'isrc': UNSET,
+    'bpm': UNSET,
+    'key_signature': UNSET,
+    'purchase_url': UNSET,
+    'video_url': UNSET,
+    'sharing': UNSET,
 }  
 
 VOCAB_TRACK_TYPES = [
@@ -55,6 +66,10 @@ VOCAB_LICENSES = [
 VOCAB_FILEOPTS = [
     ('keep', u'Keep Existing file'),
     ('replace', u'Replace existing file'),
+]
+VOCAB_SHARING = [
+    ('public', u'Public - Makes this track  available to everyone'),
+    ('private', u'Private - Only you have access'),
 ]
 
 class SoundcloudAddEdit(BrowserView):    
@@ -101,6 +116,10 @@ class SoundcloudAddEdit(BrowserView):
                     upload_track_data[key] = data[key].extracted['file']
             else:
                 upload_track_data[key] = data[key].extracted
+            if isinstance(upload_track_data[key], int):
+                upload_track_data[key] = str(upload_track_data[key])
+            if isinstance(upload_track_data[key], float):
+                upload_track_data[key] = '%1.1f' % upload_track_data[key]
         sc = get_soundcloud_api()
         if self.mode == EDIT:
             tracks = sc.tracks(self.context.trackdata['id']) 
@@ -127,4 +146,8 @@ class SoundcloudAddEdit(BrowserView):
     @property
     def vocab_fileopts(self):
         return VOCAB_FILEOPTS
+
+    @property
+    def vocab_sharing(self):
+        return VOCAB_SHARING
     
