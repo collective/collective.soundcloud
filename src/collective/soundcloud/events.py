@@ -1,9 +1,9 @@
-from zope.interfaces import implements
-from zope.lifecyclevent import (
+from zope.interface import implements
+from zope.lifecycleevent import (
     ObjectCreatedEvent, 
     ObjectModifiedEvent
 )
-from zope.lifecyclevent.interfaces import (
+from zope.lifecycleevent.interfaces import (
     IObjectCreatedEvent, 
     IObjectModifiedEvent
 )

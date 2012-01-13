@@ -12,7 +12,7 @@ from collective.soundcloud.interfaces import ISoundcloudItem
 from collective.soundcloud.utils import get_soundcloud_api
 from collective.soundcloud.events import (
     SoundcloudCreatedEvent,
-    SoundcloudModifedEvent
+    SoundcloudModifiedEvent
 )
 
 _ = MessageFactory('collective.soundcloud')
