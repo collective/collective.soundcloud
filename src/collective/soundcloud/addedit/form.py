@@ -97,7 +97,7 @@ class SoundcloudAddEdit(BrowserView):
         self.request.RESPONSE.redirect(controller.next)
             
     def next(self, request):
-        return self.context.absolute_url()
+        return self.context.absolute_url() + '/view'
 
     @property
     def action(self):
