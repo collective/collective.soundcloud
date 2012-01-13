@@ -141,6 +141,9 @@ class SoundcloudAddEdit(BrowserView):
         else:
             if not ISoundcloudItem.providedBy(self.context):
                 self.context = TrackItem(trackdata['id']).__of__(self.context)
+            else:
+                self.context.trackdata = trackdata
+                self.soundcloud_id = trackdata['id']                
             notify(SoundcloudCreatedEvent(self.context))
 
     @property
