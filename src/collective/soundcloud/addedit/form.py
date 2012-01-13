@@ -94,7 +94,8 @@ class SoundcloudAddEdit(BrowserView):
         controller = Controller(form, self.request)
         if not controller.next:
             return controller.rendered        
-        self.request.RESPONSE.redirect(controller.next)
+        if "location" not in self.request.RESPONSE.headers:
+            self.request.RESPONSE.redirect(controller.next)
             
     def next(self, request):
         return self.context.absolute_url() + '/view'
