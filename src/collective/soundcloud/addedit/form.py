@@ -80,6 +80,10 @@ VOCAB_SHARING = [
 
 class SoundcloudAddEdit(BrowserView):    
     
+    def _fetch_form(self):
+        return parse_from_YAML('collective.soundcloud.addedit:form.yaml',
+                               self,  _)
+    
     def form(self):
         self.mode = ADD        
         self.trackdata = dict(DEFAULTS)
@@ -89,8 +93,7 @@ class SoundcloudAddEdit(BrowserView):
             self.trackdata = copy.deepcopy(self.context.trackdata)
             self.trackdata['asset_data'] = FILEMARKER
             self.soundcloud_id = self.trackdata['id']
-        form = parse_from_YAML('collective.soundcloud.addedit:form.yaml',
-                               self,  _)        
+        form = self._fetch_form() 
         controller = Controller(form, self.request)
         if not controller.next:
             return controller.rendered        
