@@ -109,10 +109,7 @@ class SoundcloudAddEdit(BrowserView):
         url = self.context.absolute_url()
         return '%s/@@soundcloud_%s' % (url, postfix)
     
-    def save(self, widget, data):
-        if self.request.method != 'POST':
-            raise Unauthorized('POST only')
-        # upload here
+    def _prepare_trackdata(self, widget, data):
         upload_track_data = dict()
         for key in DEFAULTS:
             if data[key].extracted is UNSET:
@@ -138,6 +135,12 @@ class SoundcloudAddEdit(BrowserView):
         except RequestError:
             # TODO Error handling
             raise
+        return upload_track_data
+    
+    def save(self, widget, data):
+        if self.request.method != 'POST':
+            raise Unauthorized('POST only')
+        upload_track_data = self._prepare_trackdata(widget, data)
         self.trackdata = trackdata
         self.soundcloud_id = trackdata['id']
         if self.mode == EDIT:
