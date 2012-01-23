@@ -131,7 +131,7 @@ class SoundcloudAddEdit(BrowserView):
         else:
             tracks = sc.tracks()     
         try:
-            trackdata = tracks(upload_track_data)
+            upload_track_data = tracks(upload_track_data)
         except RequestError:
             # TODO Error handling
             raise
