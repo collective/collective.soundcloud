@@ -132,7 +132,7 @@ class SoundcloudAddEdit(BrowserView):
         else:
             tracks = sc.tracks()     
         try:
-            trackdata = tracks(upload_track_data)
+            upload_track_data = tracks(upload_track_data)
         except RequestError:
             # TODO Error handling
             raise
@@ -141,7 +141,7 @@ class SoundcloudAddEdit(BrowserView):
     def save(self, widget, data):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
-        upload_track_data = self._prepare_trackdata(widget, data)
+        trackdata = self._prepare_trackdata(widget, data)
         self.trackdata = trackdata
         self.soundcloud_id = trackdata['id']
         if self.mode == EDIT:
