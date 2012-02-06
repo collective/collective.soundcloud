@@ -39,6 +39,7 @@ DEFAULTS = {
     'purchase_url': UNSET,
     'video_url': UNSET,
     'sharing': UNSET,
+#    'downloadable': False,
 }  
 
 VOCAB_TRACK_TYPES = [
@@ -147,14 +148,26 @@ class SoundcloudAddEdit(BrowserView):
             self.context.trackdata = trackdata
             self.context.soundcloud_id = trackdata['id']
             notify(SoundcloudModifiedEvent(self.context))
+        elif ISoundcloudItem.providedBy(self.context):
+            finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s" % (
+                                self.context.absolute_url(), self.soundcloud_id) 
+            self.request.response.redirect(finalize_url)
+            return "redirect to %s" % finalize_url
         else:
-            if ISoundcloudItem.providedBy(self.context):
-                setattr(self.context, 'trackdata', trackdata)
-                setattr(self.context, 'soundcloud_id', trackdata['id'])
-                self.soundcloud_id = trackdata['id']                
-            else:
-                self.context = TrackItem(trackdata['id']).__of__(self.context)
-            notify(SoundcloudCreatedEvent(self.context))
+            self.context = TrackItem(trackdata['id']).__of__(self.context)
+            notify(SoundcloudCreatedEvent(self.context))                
+        
+    def save_finalize(self):
+        """transaction save modification"""
+        scid = self.request.form.get('scid')
+        if not scid:
+            raise ValueError('soundcloud id not provided')
+        sc = get_soundcloud_api()
+        self.trackdata = sc.tracks[scid]        
+        self.soundcloud_id = self.trackdata['id']
+        setattr(self.context, 'trackdata', self.trackdata)
+        setattr(self.context, 'soundcloud_id', self.trackdata['id'])
+        notify(SoundcloudCreatedEvent(self.context))            
 
     @property
     def vocab_track_types(self):        
