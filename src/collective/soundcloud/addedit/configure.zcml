@@ -23,12 +23,17 @@
   />
   <browser:page
     name="soundcloud_modify_finalize"
+    for="collective.soundcloud.interfaces.ISoundcloudItem"
+    layer="collective.soundcloud.interfaces.SoundcloudLayer"
+    class=".form.SoundcloudAddEditFinalize"
+    permission="cmf.ModifyPortalContent"
+  />
+  <browser:page
+    name="soundcloud_modify_finalize"
     for="*"
     layer="collective.soundcloud.interfaces.SoundcloudLayer"
-    class=".form.SoundcloudAddEdit"
-    attribute="save_finalize"
-    template="form.pt"
-    permission="cmf.ModifyPortalContent"
+    class=".form.SoundcloudAddEditFinalize"
+    permission="cmf.AddPortalContent"
   />
 
 </configure>

@@ -144,30 +144,19 @@ class SoundcloudAddEdit(BrowserView):
         trackdata = self._prepare_trackdata(widget, data)
         self.trackdata = trackdata
         self.soundcloud_id = trackdata['id']
-        if self.mode == EDIT:
-            self.context.trackdata = trackdata
-            self.context.soundcloud_id = trackdata['id']
-            notify(SoundcloudModifiedEvent(self.context))
-        elif ISoundcloudItem.providedBy(self.context):
-            finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s" % (
-                                self.context.absolute_url(), self.soundcloud_id) 
+        if self.mode == EDIT or ISoundcloudItem.providedBy(self.context):
+            # transaction save modification, ISoundcloudItem can be persistent
+            finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s&mode=%s" % (
+                                self.context.absolute_url(), 
+                                self.soundcloud_id,
+                                self.mode==EDIT and 'edit' or 'add') 
             self.request.response.redirect(finalize_url)
-            return "redirect to %s" % finalize_url
         else:
             self.context = TrackItem(trackdata['id']).__of__(self.context)
+            self.request.response.redirect(self.context.absolute_url()+'/view')
             notify(SoundcloudCreatedEvent(self.context))                
         
-    def save_finalize(self):
-        """transaction save modification"""
-        scid = self.request.form.get('scid')
-        if not scid:
-            raise ValueError('soundcloud id not provided')
-        sc = get_soundcloud_api()
-        self.trackdata = sc.tracks[scid]        
-        self.soundcloud_id = self.trackdata['id']
-        setattr(self.context, 'trackdata', self.trackdata)
-        setattr(self.context, 'soundcloud_id', self.trackdata['id'])
-        notify(SoundcloudCreatedEvent(self.context))            
+                       
 
     @property
     def vocab_track_types(self):        
@@ -185,3 +174,23 @@ class SoundcloudAddEdit(BrowserView):
     def vocab_sharing(self):
         return VOCAB_SHARING
     
+class SoundcloudAddEditFinalize(BrowserView):    
+
+    def __call__(self):
+        """transaction save modification"""
+        scid = self.request.form.get('scid')
+        if not scid:
+            raise ValueError('soundcloud id not provided')
+        mode = self.request.form.get('mode')
+        if mode not in ['add', 'edit']:
+            raise ValueError('invalid mode')
+        sc = get_soundcloud_api()
+        trackdata = sc.tracks(scid)()                
+        setattr(self.context, 'trackdata', trackdata)
+        setattr(self.context, 'soundcloud_id', trackdata['id'])
+        self.request.response.redirect(self.context.absolute_url()+'/view')
+        if mode == 'edit':
+            notify(SoundcloudModifiedEvent(self.context))
+        else:
+            notify(SoundcloudCreatedEvent(self.context))
+        return 'redirect to view'
