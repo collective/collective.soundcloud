@@ -143,17 +143,15 @@ class SoundcloudAddEdit(BrowserView):
             raise Unauthorized('POST only')
         self.trackdata = self._prepare_trackdata(widget, data)
         self.soundcloud_id = self.trackdata['id']
-        if self.mode == EDIT or ISoundcloudItem.providedBy(self.context):
-            # transaction save modification, ISoundcloudItem can be persistent
-            finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s&mode=%s" % (
-                                self.context.absolute_url(), 
-                                self.soundcloud_id,
-                                self.mode==EDIT and 'edit' or 'add') 
-            self.request.response.redirect(finalize_url)
-            return
-        self.context = TrackItem(self.trackdata['id']).__of__(self.context)
-        self.request.response.redirect(self.context.absolute_url()+'/view')
-        notify(SoundcloudCreatedEvent(self.context))                                       
+        if self.mode == ADD:
+            base_url = '%s/++soundcloud++%d' % (self.context.absolute_url(),
+                                                self.soundcloud_id)
+        else:
+            base_url = self.context.absolute_url()
+        finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s&mode=%s" % (
+                            base_url, self.soundcloud_id,
+                            self.mode==EDIT and 'edit' or 'add')
+        self.request.response.redirect(finalize_url)
 
     @property
     def vocab_track_types(self):        
@@ -171,7 +169,7 @@ class SoundcloudAddEdit(BrowserView):
     def vocab_sharing(self):
         return VOCAB_SHARING
     
-class SoundcloudAddEditFinalize(BrowserView):    
+class SoundcloudAddEditFinalize(BrowserView):
 
     def __call__(self):
         """transaction save modification"""

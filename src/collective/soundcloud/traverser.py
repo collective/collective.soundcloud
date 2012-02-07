@@ -5,7 +5,7 @@ from zope.publisher.interfaces import (
     NotFound,
     TraversalException,
 )
-from Acquisition import Implicit, aq_parent
+from Acquisition import Implicit, aq_parent, aq_inner
 from OFS.SimpleItem import Item
 from soundcloudapi import SoundcloudException
 from collective.soundcloud.interfaces import ISoundcloudPublisher
@@ -40,8 +40,12 @@ class TrackItem(Implicit, Item):
         return trackdata
     
     def getPhysicalPath(self):
-        return tuple(list(aq_parent(self).getPhysicalPath()) + \
-                     ['++soundcloud++%s' % self.soundcloud_id])
+        parent = aq_parent(aq_inner(self))
+        trav = '++soundcloud++%s' % self.soundcloud_id
+        if not hasattr(parent, 'getPhysicalPath'):
+            return ('', trav)
+        return tuple(list(parent.getPhysicalPath()) + [trav])
+        
 
 class TrackTraverser(object):
 

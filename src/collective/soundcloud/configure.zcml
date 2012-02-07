@@ -27,7 +27,7 @@
         
     <adapter    
         for="*
-             zope.publisher.interfaces.http.IHTTPRequest"
+             collective.soundcloud.interfaces.SoundcloudLayer"
         factory=".traverser.TrackTraverser"
         name="soundcloud" />
         
