@@ -130,11 +130,15 @@ class SoundcloudAddEdit(BrowserView):
                 upload_track_data[key] = str(upload_track_data[key])
             if isinstance(upload_track_data[key], float):
                 upload_track_data[key] = '%1.1f' % upload_track_data[key]
+        return upload_track_data
+
+    def _upload_trackdata(self, widget, data):
+        upload_track_data = _prepare_trackdata(self, widget, data)
         sc = get_soundcloud_api()
         if self.mode == EDIT:
-            tracks = sc.tracks(self.context.trackdata['id']) 
+            tracks = sc.tracks(self.context.trackdata['id'])
         else:
-            tracks = sc.tracks()     
+            tracks = sc.tracks()
         try:
             upload_track_data = tracks(upload_track_data)
         except RequestError:
@@ -145,7 +149,7 @@ class SoundcloudAddEdit(BrowserView):
     def save(self, widget, data):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
-        self.trackdata = self._prepare_trackdata(widget, data)
+        self.trackdata = self._upload_trackdata(widget, data)
         self.soundcloud_id = self.trackdata['id']
         if self.mode == ADD:
             base_url = '%s/++soundcloud++%d' % (self.context.absolute_url(),
