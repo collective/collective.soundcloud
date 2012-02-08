@@ -133,7 +133,7 @@ class SoundcloudAddEdit(BrowserView):
         return upload_track_data
 
     def _upload_trackdata(self, widget, data):
-        upload_track_data = _prepare_trackdata(self, widget, data)
+        upload_track_data = self._prepare_trackdata(widget, data)
         sc = get_soundcloud_api()
         if self.mode == EDIT:
             tracks = sc.tracks(self.context.trackdata['id'])

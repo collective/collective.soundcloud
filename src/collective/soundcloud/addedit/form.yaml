@@ -134,7 +134,7 @@ widgets:
     props:
         label: Buy Link
         help: purchase URL, i.e. http://amazon.com/buy/a46aj0c03
-        help_class: formHelp         
+        help_class: formHelp
 - video_url:
     factory: field:label:error:text
     value: expr:context.trackdata['video_url']
@@ -148,7 +148,7 @@ widgets:
     props:
         label: Permissions
         help: Share public to everyone or private for you only?
-        help_class: formHelp    
+        help_class: formHelp
         vocabulary: expr:context.vocab_sharing        
 - downloadable:
     factory: field:label:error:select
