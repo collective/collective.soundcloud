@@ -39,7 +39,7 @@ DEFAULTS = {
     'purchase_url': UNSET,
     'video_url': UNSET,
     'sharing': UNSET,
-#    'downloadable': False,
+    'downloadable': UNSET,
 }  
 
 VOCAB_TRACK_TYPES = [
@@ -77,6 +77,10 @@ VOCAB_FILEOPTS = [
 VOCAB_SHARING = [
     ('public', u'Public - Makes this track  available to everyone'),
     ('private', u'Private - Only you have access'),
+]
+VOCAB_DOWNLOAD = [
+    ('true', u'Enabled'),
+    ('false', u'Disabled'),
 ]
 
 class SoundcloudAddEdit(BrowserView):    
@@ -168,6 +172,10 @@ class SoundcloudAddEdit(BrowserView):
     @property
     def vocab_sharing(self):
         return VOCAB_SHARING
+    
+    @property
+    def vocab_download(self):
+        return VOCAB_DOWNLOAD
     
 class SoundcloudAddEditFinalize(BrowserView):
 
