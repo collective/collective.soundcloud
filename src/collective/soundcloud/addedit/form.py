@@ -123,7 +123,7 @@ class SoundcloudAddEdit(BrowserView):
                 if data[key].extracted is FILEMARKER:
                     continue
                 else:
-                    upload_track_data[key] = data[key].extracted['file']
+                    upload_track_data[key] = data[key].extracted['original']
             else:
                 upload_track_data[key] = data[key].extracted
             if isinstance(upload_track_data[key], int):
