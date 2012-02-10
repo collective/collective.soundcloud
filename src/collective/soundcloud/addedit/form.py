@@ -124,6 +124,8 @@ class SoundcloudAddEdit(BrowserView):
                     continue
                 else:
                     upload_track_data[key] = data[key].extracted['original']
+                    setattr(upload_track_data[key], 'name', 
+                            data[key].extracted['filename'])
             else:
                 upload_track_data[key] = data[key].extracted
             if isinstance(upload_track_data[key], int):
