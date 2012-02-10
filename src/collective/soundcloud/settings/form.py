@@ -44,8 +44,8 @@ class SoundcloudControlPanel(SoundcloudViewMixin, BrowserView):
             return controller.rendered
         if not self.redirected:
             self.request.RESPONSE.redirect(self.action)
-        return u''        
-            
+        return u''
+
     def next(self, request):
         return self.controlpanel_uri
 
@@ -59,7 +59,8 @@ class SoundcloudControlPanel(SoundcloudViewMixin, BrowserView):
         newid = data['client_id'].extracted
         newsec = data['client_secret'].extracted
         if self.settings.client_id == newid \
-           and self.settings.client_secret == newsec:   
+           and self.settings.client_secret == newsec \
+           and self.settings.token:
             self.messages.addStatusMessage(_(u'All values unchanged.'), 
                                            type="info")
             return                
