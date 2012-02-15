@@ -30,9 +30,9 @@
      handler=".listing.listing_lookup_handler" />
      
   <subscriber 
-     for="collective.soundcloud.types.alias.IAlias
+     for="collective.soundcloud.types.listing.IListing
           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-     handler=".alias.alias_lookup_handler" />
+     handler=".listing.listing_lookup_handler" />
      
   <browser:page
     name="view"
