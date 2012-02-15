@@ -18,12 +18,22 @@ from collective.soundcloud.utils import (
     validate_user,
     validate_set,
 )
+import operator
 
 _ = MessageFactory("collective.soundcloud")
 
 listing_types = SimpleVocabulary([
      SimpleTerm(value=u'set', title=_(u'Set')),
      SimpleTerm(value=u'user', title=_(u'Tracks of a User')),
+])
+
+sort_order = SimpleVocabulary([
+     SimpleTerm(value=u'title', title=_(u'Title')),
+     SimpleTerm(value=u'created_at', title=_(u'Date')),
+     SimpleTerm(value=u'duration', title=_(u'Duration')),
+     SimpleTerm(value=u'shared_to_count', title=_(u'Shared to count')),
+     SimpleTerm(value=u'release', title=_(u'Release number')),
+     SimpleTerm(value=u'bpm', title=_(u'BPM')),
 ])
 
 PLAYER = u"http://api.soundcloud.com/tracks/%s"
@@ -52,19 +62,28 @@ class IListing(form.Schema):
         )         
 
     sc_filter = schema.TextLine(
-            title=_(u"Fulltext-Filter"),
+            title=_(u"Tags-Filter"),
             required=False,
         )         
 
-    sc_filter = schema.TextLine(
-            title=_(u"Tags-Filter"),
+    sc_quantity = schema.Int(
+            title=_(u"Number of items"),
+            required=False,
+        )         
+    sc_sortorder = schema.Choice(
+            title=_(u"Sort Order"),
+            required=False,
+            vocabulary=sort_order,
+        )         
+    sc_sortreverse = schema.Bool(
+            title=_(u"Reverse Order"),
             required=False,
         )         
 
 
     @invariant
     def validate_listing_type(data):
-        sc = get_soundcloud_api()        
+        sc = get_soundcloud_api()
         if data.sc_type == u'user':
             if data.sc_you or data.sc_id:
                 if data.sc_id:
@@ -126,7 +145,17 @@ class View(BrowserView):
                 user = sc.me()
             else:
                 user = sc.users(self.context.sc_id)
-            tracks = user.tracks()
+            filter = {}
+            if self.context.sc_filter:
+                filter['tags'] = self.context.sc_filter
+            tracks = user.tracks(filter=filter)
+        if self.context.sc_sortorder:
+            if self.context.sc_sortorder:
+                def keygetter(track):
+                    return track[self.context.sc_sortorder]
+                tracks = sorted(tracks, key=keygetter, reverse=self.context.sc_sortreverse)
+        if self.context.sc_quantity:
+            tracks = tracks[:self.context.sc_quantity]
         for track in tracks:
             track[u'player_url'] = player_url(track['id'])
         return tracks
