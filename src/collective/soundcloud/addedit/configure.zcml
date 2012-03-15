@@ -10,7 +10,6 @@
     for="collective.soundcloud.interfaces.ISoundcloudItem"
     layer="collective.soundcloud.interfaces.SoundcloudLayer"    
     class=".form.SoundcloudAddEdit"
-    template="form.pt"
     permission="cmf.ModifyPortalContent"
   />
   <browser:page
@@ -18,7 +17,6 @@
     for="*"
     layer="collective.soundcloud.interfaces.SoundcloudLayer"
     class=".form.SoundcloudAddEdit"
-    template="form.pt"
     permission="cmf.AddPortalContent"
   />
   <browser:page

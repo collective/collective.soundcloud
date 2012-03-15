@@ -11,7 +11,7 @@
     <metal:content-core fill-slot="content-core">
         <metal:block define-macro="content-core">
 
-            <tal:form replace="structure python:view.form()" />
+            <tal:form replace="structure python:view.controller.rendered" />
             
         </metal:block>
     </metal:content-core>

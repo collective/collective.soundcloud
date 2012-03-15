@@ -4,6 +4,7 @@ from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zExceptions import Unauthorized
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 import yafowil.zope2
 from yafowil.base import UNSET
 from yafowil.controller import Controller
@@ -85,11 +86,13 @@ VOCAB_DOWNLOAD = [
 
 class SoundcloudAddEdit(BrowserView):    
     
+    template = ViewPageTemplateFile('form.pt')
+    
     def _fetch_form(self):
         return parse_from_YAML('collective.soundcloud.addedit:form.yaml',
                                self,  _)
     
-    def form(self):
+    def __call__(self):
         self.mode = ADD        
         self.trackdata = dict(DEFAULTS)
         self.soundcloud_id = None
@@ -99,11 +102,11 @@ class SoundcloudAddEdit(BrowserView):
             self.trackdata['asset_data'] = FILEMARKER
             self.soundcloud_id = self.trackdata['id']
         form = self._fetch_form() 
-        controller = Controller(form, self.request)
-        if not controller.next:
-            return controller.rendered        
+        self.controller = Controller(form, self.request)
+        if not self.controller.next:
+            return self.template() 
         if "location" not in self.request.RESPONSE.headers:
-            self.request.RESPONSE.redirect(controller.next)
+            self.request.RESPONSE.redirect(self.controller.next)
             
     def next(self, request):
         return self.context.absolute_url() + '/view'
