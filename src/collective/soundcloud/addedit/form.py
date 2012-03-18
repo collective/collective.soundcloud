@@ -1,8 +1,13 @@
+import os
 import copy
+import tempfile
+import shutil
 from restkit import RequestError
 from zope.event import notify
+from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 from zExceptions import Unauthorized
+from plone.app.async.interfaces import IAsyncService
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 import yafowil.zope2
@@ -84,6 +89,32 @@ VOCAB_DOWNLOAD = [
     ('false', u'Disabled'),
 ]
 
+def async_upload_handler(context, upload_track_data, mode, scid):
+    sc = get_soundcloud_api()
+    if mode == EDIT:
+        tracks = sc.tracks(scid)
+    else:
+        tracks = sc.tracks()
+    tfname = upload_track_data['asset_data']
+    tdir = os.path.dirname(tfname)
+    try:
+        tf = open(tfname, 'rb')
+        upload_track_data['asset_data'] = tf
+        try:
+            upload_track_data = tracks(upload_track_data)
+        except RequestError:
+            # TODO Error handling
+            raise
+    finally:
+        tf.close()
+        shutil.rmtree(tdir)
+    setattr(context, 'trackdata', upload_track_data)
+    setattr(context, 'soundcloud_id', upload_track_data['id'])
+    if mode == 'edit':
+        notify(SoundcloudModifiedEvent(context))
+    else:
+        notify(SoundcloudCreatedEvent(context))        
+
 class SoundcloudAddEdit(BrowserView):    
     
     template = ViewPageTemplateFile('form.pt')
@@ -125,46 +156,28 @@ class SoundcloudAddEdit(BrowserView):
             if key == 'asset_data':
                 if data[key].extracted is FILEMARKER:
                     continue
-                else:
-                    upload_track_data[key] = data[key].extracted['original']
-                    setattr(upload_track_data[key], 'name', 
-                            data[key].extracted['filename'])
+                # works not over zeos distributed over more than one server
+                tdir = tempfile.mkdtemp()
+                tfname = os.path.join(tdir, data[key].extracted['filename'])
+                with open(tfname, 'wb') as tf:
+                    tf.write(data[key].extracted['original'].read())
+                upload_track_data[key] = tfname
             else:
                 upload_track_data[key] = data[key].extracted
             if isinstance(upload_track_data[key], int):
                 upload_track_data[key] = str(upload_track_data[key])
-            if isinstance(upload_track_data[key], float):
+            elif isinstance(upload_track_data[key], float):
                 upload_track_data[key] = '%1.1f' % upload_track_data[key]
-        return upload_track_data
-
-    def _upload_trackdata(self, widget, data):
-        upload_track_data = self._prepare_trackdata(widget, data)
-        sc = get_soundcloud_api()
-        if self.mode == EDIT:
-            tracks = sc.tracks(self.context.trackdata['id'])
-        else:
-            tracks = sc.tracks()
-        try:
-            upload_track_data = tracks(upload_track_data)
-        except RequestError:
-            # TODO Error handling
-            raise
         return upload_track_data
     
     def save(self, widget, data):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
-        self.trackdata = self._upload_trackdata(widget, data)
-        self.soundcloud_id = self.trackdata['id']
-        if self.mode == ADD:
-            base_url = '%s/++soundcloud++%d' % (self.context.absolute_url(),
-                                                self.soundcloud_id)
-        else:
-            base_url = self.context.absolute_url()
-        finalize_url = "%s/@@soundcloud_modify_finalize?scid=%s&mode=%s" % (
-                            base_url, self.soundcloud_id,
-                            self.mode==EDIT and 'edit' or 'add')
-        self.request.response.redirect(finalize_url)
+        upload_track_data = self._prepare_trackdata(widget, data)
+        async = getUtility(IAsyncService)
+        async.queueJob(async_upload_handler, self.context, upload_track_data, 
+                       self.mode, self.soundcloud_id)
+        self.request.response.redirect(self.context.absolute_url()+'/view')
 
     @property
     def vocab_track_types(self):        
@@ -185,24 +198,3 @@ class SoundcloudAddEdit(BrowserView):
     @property
     def vocab_download(self):
         return VOCAB_DOWNLOAD
-    
-class SoundcloudAddEditFinalize(BrowserView):
-
-    def __call__(self):
-        """transaction save modification"""
-        scid = self.request.form.get('scid')
-        if not scid:
-            raise ValueError('soundcloud id not provided')
-        mode = self.request.form.get('mode')
-        if mode not in ['add', 'edit']:
-            raise ValueError('invalid mode')
-        sc = get_soundcloud_api()
-        trackdata = sc.tracks(scid)()                
-        setattr(self.context, 'trackdata', trackdata)
-        setattr(self.context, 'soundcloud_id', trackdata['id'])
-        self.request.response.redirect(self.context.absolute_url()+'/view')
-        if mode == 'edit':
-            notify(SoundcloudModifiedEvent(self.context))
-        else:
-            notify(SoundcloudCreatedEvent(self.context))
-        return 'redirect to view'
