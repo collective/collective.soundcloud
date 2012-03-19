@@ -156,6 +156,7 @@ class SoundcloudAddEdit(BrowserView):
             if key == 'asset_data':
                 if data[key].extracted is FILEMARKER:
                     continue
+                # TODO! fix this.
                 # works not over zeos distributed over more than one server
                 tdir = tempfile.mkdtemp()
                 tfname = os.path.join(tdir, data[key].extracted['filename'])
