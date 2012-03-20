@@ -3,7 +3,7 @@ from zope.i18nmessageid import MessageFactory
 from zExceptions import Unauthorized
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.Five import BrowserView
-import yafowil.zope2
+import yafowil.loader
 from yafowil.base import UNSET
 from yafowil.controller import Controller
 from yafowil.yaml import parse_from_YAML

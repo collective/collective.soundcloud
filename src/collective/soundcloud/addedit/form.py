@@ -10,7 +10,7 @@ from zExceptions import Unauthorized
 from plone.app.async.interfaces import IAsyncService
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-import yafowil.zope2
+import yafowil.loader
 from yafowil.base import UNSET
 from yafowil.controller import Controller
 from yafowil.yaml import parse_from_YAML
@@ -113,7 +113,7 @@ def async_upload_handler(context, upload_track_data, mode, scid):
     if mode == 'edit':
         notify(SoundcloudModifiedEvent(context))
     else:
-        notify(SoundcloudCreatedEvent(context))        
+        notify(SoundcloudCreatedEvent(context))
 
 class SoundcloudAddEdit(BrowserView):    
     
