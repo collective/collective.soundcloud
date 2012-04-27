@@ -115,6 +115,7 @@ def async_upload_handler(context, upload_track_data, mode, scid):
         upload_track_data = upload(upload_track_data)
     setattr(context, 'trackdata', upload_track_data)
     setattr(context, 'soundcloud_id', upload_track_data['id'])
+    context._p_changed = 1
     if mode == 'edit':
         notify(SoundcloudModifiedEvent(context))
     else:
