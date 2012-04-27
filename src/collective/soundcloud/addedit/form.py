@@ -88,6 +88,12 @@ VOCAB_DOWNLOAD = [
     ('true', u'Enabled'),
     ('false', u'Disabled'),
 ]
+def upload(upload_track_data):
+    try:
+        return tracks(upload_track_data)
+    except RequestError:
+        # TODO Error handling
+        raise
 
 def async_upload_handler(context, upload_track_data, mode, scid):
     sc = get_soundcloud_api()
@@ -95,19 +101,18 @@ def async_upload_handler(context, upload_track_data, mode, scid):
         tracks = sc.tracks(scid)
     else:
         tracks = sc.tracks()
-    tfname = upload_track_data['asset_data']
-    tdir = os.path.dirname(tfname)
-    try:
-        tf = open(tfname, 'rb')
-        upload_track_data['asset_data'] = tf
+    tfname = upload_track_data.get('asset_data', None)
+    if tfname:
+        tdir = os.path.dirname(tfname)
         try:
-            upload_track_data = tracks(upload_track_data)
-        except RequestError:
-            # TODO Error handling
-            raise
-    finally:
-        tf.close()
-        shutil.rmtree(tdir)
+            tf = open(tfname, 'rb')
+            upload_track_data['asset_data'] = tf
+            upload_track_data = upload(upload_track_data)
+        finally:
+            tf.close()
+            shutil.rmtree(tdir)
+    else:
+        upload_track_data = upload(upload_track_data)
     setattr(context, 'trackdata', upload_track_data)
     setattr(context, 'soundcloud_id', upload_track_data['id'])
     if mode == 'edit':
