@@ -88,7 +88,7 @@ VOCAB_DOWNLOAD = [
     ('true', u'Enabled'),
     ('false', u'Disabled'),
 ]
-def upload(upload_track_data):
+def upload(tracks, upload_track_data):
     try:
         return tracks(upload_track_data)
     except RequestError:
@@ -107,12 +107,12 @@ def async_upload_handler(context, upload_track_data, mode, scid):
         try:
             tf = open(tfname, 'rb')
             upload_track_data['asset_data'] = tf
-            upload_track_data = upload(upload_track_data)
+            upload_track_data = upload(tracks, upload_track_data)
         finally:
             tf.close()
             shutil.rmtree(tdir)
     else:
-        upload_track_data = upload(upload_track_data)
+        upload_track_data = upload(tracks, upload_track_data)
     setattr(context, 'trackdata', upload_track_data)
     setattr(context, 'soundcloud_id', upload_track_data['id'])
     context._p_changed = 1
