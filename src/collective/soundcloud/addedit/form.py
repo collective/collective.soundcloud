@@ -97,11 +97,13 @@ def upload(tracks, upload_track_data):
 
 def async_upload_handler(context, upload_track_data, mode, scid):
     sc = get_soundcloud_api()
+    tfname = upload_track_data.get('asset_data', None)
+    tracks = sc.tracks()
     if mode == EDIT:
         tracks = sc.tracks(scid)
-    else:
-        tracks = sc.tracks()
-    tfname = upload_track_data.get('asset_data', None)
+        if tfname:
+            tracks(delete=True)
+            tracks = sc.tracks()
     if tfname:
         tdir = os.path.dirname(tfname)
         try:
