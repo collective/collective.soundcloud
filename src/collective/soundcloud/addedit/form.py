@@ -99,6 +99,7 @@ def async_upload_handler(context, upload_track_data, mode, scid):
     sc = get_soundcloud_api()
     tfname = upload_track_data.get('asset_data', None)
     tracks = sc.tracks()
+    import pdb;pdb.set_trace()
     if mode == EDIT:
         tracks = sc.tracks(scid)
         if tfname:

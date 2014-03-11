@@ -11,7 +11,8 @@ from zope.schema.vocabulary import (
 )
 from zope.publisher.browser import BrowserView
 from zope.i18nmessageid import MessageFactory
-from plone.directives import form, dexterity
+#from plone.directives import form, dexterity
+from plone.directives import form
 from collective.soundcloud.utils import (
     get_soundcloud_api,
     player_url,

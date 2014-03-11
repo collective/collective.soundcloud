@@ -2,7 +2,8 @@ from zope.interface import implementer
 from zope.component import adapter
 from zope import schema
 from zope.i18nmessageid import MessageFactory
-from plone.directives import form, dexterity
+#from plone.directives import form, dexterity
+from plone.directives import form
 from zope.publisher.browser import BrowserView
 from collective.soundcloud.utils import (
     get_soundcloud_api,
