@@ -99,7 +99,6 @@ def async_upload_handler(context, upload_track_data, mode, scid):
     sc = get_soundcloud_api()
     tfname = upload_track_data.get('asset_data', None)
     tracks = sc.tracks()
-    import pdb;pdb.set_trace()
     if mode == EDIT:
         tracks = sc.tracks(scid)
         if tfname:
@@ -139,7 +138,7 @@ class SoundcloudAddEdit(BrowserView):
         if ISoundcloudItem.providedBy(self.context):
             self.mode = EDIT
             self.trackdata = copy.deepcopy(self.context.trackdata)
-            self.trackdata['asset_data'] = FILEMARKER
+            self.trackdata['asset_data'] = {}
             self.soundcloud_id = self.trackdata['id']
         form = self._fetch_form() 
         self.controller = Controller(form, self.request)
