@@ -143,6 +143,7 @@ class SoundcloudAddEdit(BrowserView):
             self.soundcloud_id = self.trackdata['id']
         form = self._fetch_form() 
         self.controller = Controller(form, self.request)
+            
         if not self.controller.next:
             return self.template() 
         if "location" not in self.request.RESPONSE.headers:
@@ -163,7 +164,7 @@ class SoundcloudAddEdit(BrowserView):
             if data[key].extracted is UNSET:
                 continue
             if key == 'asset_data':
-                if data[key].extracted is FILEMARKER:
+                if data[key].extracted['action'] == 'keep':
                     continue
                 # TODO! fix this.
                 # works not over zeos distributed over more than one server
