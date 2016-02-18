@@ -46,7 +46,7 @@ DEFAULTS = {
     'video_url': UNSET,
     'sharing': UNSET,
     'downloadable': UNSET,
-}  
+}
 
 VOCAB_TRACK_TYPES = [
     "",
@@ -88,12 +88,15 @@ VOCAB_DOWNLOAD = [
     ('true', u'Enabled'),
     ('false', u'Disabled'),
 ]
+
+
 def upload(tracks, upload_track_data):
     try:
         return tracks(upload_track_data)
     except RequestError:
         # TODO Error handling
         raise
+
 
 def async_upload_handler(context, upload_track_data, mode, scid):
     sc = get_soundcloud_api()
@@ -123,16 +126,17 @@ def async_upload_handler(context, upload_track_data, mode, scid):
     else:
         notify(SoundcloudCreatedEvent(context))
 
-class SoundcloudAddEdit(BrowserView):    
-    
+
+class SoundcloudAddEdit(BrowserView):
+
     template = ViewPageTemplateFile('form.pt')
-    
+
     def _fetch_form(self):
         return parse_from_YAML('collective.soundcloud.addedit:form.yaml',
-                               self,  _)
-    
+                               self, _)
+
     def __call__(self):
-        self.mode = ADD        
+        self.mode = ADD
         self.trackdata = dict(DEFAULTS)
         self.soundcloud_id = None
         if ISoundcloudItem.providedBy(self.context):
@@ -140,14 +144,14 @@ class SoundcloudAddEdit(BrowserView):
             self.trackdata = copy.deepcopy(self.context.trackdata)
             self.trackdata['asset_data'] = {}
             self.soundcloud_id = self.trackdata['id']
-        form = self._fetch_form() 
+        form = self._fetch_form()
         self.controller = Controller(form, self.request)
-            
+
         if not self.controller.next:
-            return self.template() 
+            return self.template()
         if "location" not in self.request.RESPONSE.headers:
             self.request.RESPONSE.redirect(self.controller.next)
-            
+
     def next(self, request):
         return self.context.absolute_url() + '/view'
 
@@ -156,7 +160,7 @@ class SoundcloudAddEdit(BrowserView):
         postfix = self.mode == ADD and 'add' or 'edit'
         url = self.context.absolute_url()
         return '%s/@@soundcloud_%s' % (url, postfix)
-    
+
     def _prepare_trackdata(self, widget, data):
         upload_track_data = dict()
         for key in DEFAULTS:
@@ -179,24 +183,24 @@ class SoundcloudAddEdit(BrowserView):
             elif isinstance(upload_track_data[key], float):
                 upload_track_data[key] = '%1.1f' % upload_track_data[key]
         return upload_track_data
-    
+
     def save(self, widget, data):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
         upload_track_data = self._prepare_trackdata(widget, data)
         async = getUtility(IAsyncService)
-        async.queueJob(async_upload_handler, self.context, upload_track_data, 
+        async.queueJob(async_upload_handler, self.context, upload_track_data,
                        self.mode, self.soundcloud_id)
-        self.request.response.redirect(self.context.absolute_url()+'/view')
+        self.request.response.redirect(self.context.absolute_url() + '/view')
 
     @property
-    def vocab_track_types(self):        
+    def vocab_track_types(self):
         return VOCAB_TRACK_TYPES
-    
+
     @property
     def vocab_licenses(self):
         return VOCAB_LICENSES
-       
+
     @property
     def vocab_fileopts(self):
         return VOCAB_FILEOPTS
@@ -204,7 +208,7 @@ class SoundcloudAddEdit(BrowserView):
     @property
     def vocab_sharing(self):
         return VOCAB_SHARING
-    
+
     @property
     def vocab_download(self):
         return VOCAB_DOWNLOAD

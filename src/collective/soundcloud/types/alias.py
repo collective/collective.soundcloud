@@ -31,10 +31,10 @@ class IAlias(model.Schema, ISoundcloudItem):
     """
 
     soundcloud_id = schema.TextLine(
-            title=_(u"URL or ID of soundcloud item"),
-            required=True,
-            constraint=alias_validator,
-        )
+        title=_(u"URL or ID of soundcloud item"),
+        required=True,
+        constraint=alias_validator,
+    )
 
 
 def alias_lookup_handler(alias, event):

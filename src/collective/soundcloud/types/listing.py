@@ -24,17 +24,17 @@ import operator
 _ = MessageFactory("collective.soundcloud")
 
 listing_types = SimpleVocabulary([
-     SimpleTerm(value=u'set', title=_(u'Set')),
-     SimpleTerm(value=u'user', title=_(u'Tracks of a User')),
+    SimpleTerm(value=u'set', title=_(u'Set')),
+    SimpleTerm(value=u'user', title=_(u'Tracks of a User')),
 ])
 
 sort_order = SimpleVocabulary([
-     SimpleTerm(value=u'title', title=_(u'Title')),
-     SimpleTerm(value=u'created_at', title=_(u'Date')),
-     SimpleTerm(value=u'duration', title=_(u'Duration')),
-     SimpleTerm(value=u'shared_to_count', title=_(u'Shared to count')),
-     SimpleTerm(value=u'release', title=_(u'Release number')),
-     SimpleTerm(value=u'bpm', title=_(u'BPM')),
+    SimpleTerm(value=u'title', title=_(u'Title')),
+    SimpleTerm(value=u'created_at', title=_(u'Date')),
+    SimpleTerm(value=u'duration', title=_(u'Duration')),
+    SimpleTerm(value=u'shared_to_count', title=_(u'Shared to count')),
+    SimpleTerm(value=u'release', title=_(u'Release number')),
+    SimpleTerm(value=u'bpm', title=_(u'BPM')),
 ])
 
 PLAYER = u"http://api.soundcloud.com/tracks/%s"
@@ -49,38 +49,38 @@ class IListing(model.Schema):
     """
 
     sc_type = schema.Choice(
-            title=_(u"Type of Listing"),
-            vocabulary=listing_types,
-            required=True,
-        )
+        title=_(u"Type of Listing"),
+        vocabulary=listing_types,
+        required=True,
+    )
 
     sc_id = schema.TextLine(
-            title=_(u"ID or URL"),
-            required=False,
-        )
+        title=_(u"ID or URL"),
+        required=False,
+    )
 
     sc_you = schema.Bool(
-            title=_(u"You"),
-        )
+        title=_(u"You"),
+    )
 
     sc_filter = schema.TextLine(
-            title=_(u"Tags-Filter"),
-            required=False,
-        )
+        title=_(u"Tags-Filter"),
+        required=False,
+    )
 
     sc_quantity = schema.Int(
-            title=_(u"Number of items"),
-            required=False,
-        )
+        title=_(u"Number of items"),
+        required=False,
+    )
     sc_sortorder = schema.Choice(
-            title=_(u"Sort Order"),
-            required=False,
-            vocabulary=sort_order,
-        )
+        title=_(u"Sort Order"),
+        required=False,
+        vocabulary=sort_order,
+    )
     sc_sortreverse = schema.Bool(
-            title=_(u"Reverse Order"),
-            required=False,
-        )
+        title=_(u"Reverse Order"),
+        required=False,
+    )
 
     @invariant
     def validate_listing_type(data):
