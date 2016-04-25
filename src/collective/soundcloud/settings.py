@@ -15,6 +15,8 @@ from z3c.form import form
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Interface
+from plone.protect.interfaces import IDisableCSRFProtection
+from zope.interface import alsoProvides
 
 
 class ISettings(Interface):
@@ -96,6 +98,7 @@ SettingsView = layout.wrap_form(SettingsEditForm, ControlPanelFormWrapper)
 class SoundcloudRedirectHandler(BrowserView):
 
     def __call__(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
         self.request.RESPONSE.redirect(
             '{0}/soundcloud-settings'.format(self.context.absolute_url())
         )
