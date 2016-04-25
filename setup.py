@@ -33,8 +33,8 @@ setup(
     include_package_data=True,
     zip_safe=True,
     install_requires=[
+        'collective.taskqueue',
         'Plone',
-        'plone.app.async',
         'setuptools',
         'soundcloudapi',
         'yafowil.plone',
