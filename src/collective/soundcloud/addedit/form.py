@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import copy
 import tempfile
@@ -7,7 +8,7 @@ from zope.event import notify
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 from zExceptions import Unauthorized
-from plone.app.async.interfaces import IAsyncService
+# from plone.app.async.interfaces import IAsyncService
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 import yafowil.loader
@@ -188,9 +189,9 @@ class SoundcloudAddEdit(BrowserView):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
         upload_track_data = self._prepare_trackdata(widget, data)
-        async = getUtility(IAsyncService)
-        async.queueJob(async_upload_handler, self.context, upload_track_data,
-                       self.mode, self.soundcloud_id)
+        # async = getUtility(IAsyncService)
+        # async.queueJob(async_upload_handler, self.context, upload_track_data,
+        #                self.mode, self.soundcloud_id)
         self.request.response.redirect(self.context.absolute_url() + '/view')
 
     @property

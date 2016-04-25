@@ -1,16 +1,15 @@
-import time
-from zope.interface import implements
-from zope.traversing.interfaces import ITraversable
-from zope.publisher.interfaces import (
-    NotFound,
-    TraversalException,
-)
+# -*- coding: utf-8 -*-
 from Acquisition import Implicit, aq_parent, aq_inner
-from OFS.SimpleItem import Item
-from soundcloudapi import SoundcloudException
 from collective.soundcloud.interfaces import ISoundcloudPublisher
 from collective.soundcloud.utils import get_soundcloud_api
+from OFS.SimpleItem import Item
 from plone.memoize import ram
+from soundcloudapi import SoundcloudException
+from zope.interface import implements
+from zope.publisher.interfaces import TraversalException
+from zope.publisher.interfaces import NotFound
+from zope.traversing.interfaces import ITraversable
+import time
 
 
 def _cachekey_fetch_track(method, self):

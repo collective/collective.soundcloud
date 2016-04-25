@@ -1,8 +1,0 @@
-<componentregistry>
-  <utilities>
-    <utility
-        interface="collective.soundcloud.interfaces.ISoundcloudSettings"
-        factory="collective.soundcloud.settings.storage.GlobalSettingsUtility" 
-    />
-  </utilities>
-</componentregistry>
