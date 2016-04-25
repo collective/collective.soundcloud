@@ -104,9 +104,9 @@ class SoundcloudRedirectHandler(BrowserView):
         )
         code = self.request.form.get('code')
         if not code:
-            self.messages.addStatusMessage(
+            IStatusMessage(self.request).addStatusMessage(
                 _(u'Soundcloud code not fetched.'),
-                type="error"
+                "error"
             )
             return
         settings = get_soundcloud_settings()
@@ -118,13 +118,13 @@ class SoundcloudRedirectHandler(BrowserView):
         try:
             authinfo.token_from_code(code)
         except SoundcloudException:
-            self.messages.addStatusMessage(
+            IStatusMessage(self.request).addStatusMessage(
                 _(u'Soundcloud can not transform code to token.'),
-                type="error"
+                "error"
             )
             return
         settings.token = authinfo.token
-        self.messages.addStatusMessage(
+        IStatusMessage(self.request).addStatusMessage(
             _(u'Soundcloud settings completed and saved.'),
-            type="info"
+            "info"
         )
