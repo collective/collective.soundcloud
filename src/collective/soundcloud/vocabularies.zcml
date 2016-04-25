@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="collective.soundcloud">
+
+    <utility
+      component=".vocabularies.TrackTypesVocabulary"
+      name="soundcloud.tracktypes"
+      />
+
+    <utility
+      component=".vocabularies.LicensesVocabulary"
+      name="soundcloud.licences"
+      />
+
+    <utility
+      component=".vocabularies.SharingVocabulary"
+      name="soundcloud.sharing"
+      />
+
+    <utility
+      component=".vocabularies.DownloadVocabulary"
+      name="soundcloud.download"
+      />
+
+</configure>
