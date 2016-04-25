@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
+from collective.soundcloud.events import ISoundcloudModifiedEvent
+from collective.soundcloud.interfaces import ISoundcloudItem
+from collective.soundcloud.utils import get_soundcloud_api
+from collective.soundcloud.utils import validate_track
+from plone.supermodel import model
 from zope import schema
 from zope.i18nmessageid import MessageFactory
-from plone.supermodel import model
 from zope.publisher.browser import BrowserView
-from collective.soundcloud.utils import (
-    get_soundcloud_api,
-    player_url,
-    validate_track,
-)
-from collective.soundcloud.interfaces import ISoundcloudItem
-from collective.soundcloud.events import ISoundcloudModifiedEvent
 
 _ = MessageFactory("collective.soundcloud")
 

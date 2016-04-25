@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-from Acquisition import Implicit, aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from Acquisition import Implicit
 from collective.soundcloud.interfaces import ISoundcloudPublisher
 from collective.soundcloud.utils import get_soundcloud_api
 from OFS.SimpleItem import Item
 from plone.memoize import ram
 from soundcloudapi import SoundcloudException
-from zope.interface import implements
-from zope.publisher.interfaces import TraversalException
+from zope.interface import implementer
 from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces import TraversalException
 from zope.traversing.interfaces import ITraversable
+
 import time
 
 
@@ -17,9 +20,8 @@ def _cachekey_fetch_track(method, self):
     return (self.soundcloud_id, time.time() // 300)
 
 
+@implementer(ISoundcloudPublisher)
 class TrackItem(Implicit, Item):
-
-    implements(ISoundcloudPublisher)
 
     def __init__(self, scid):
         if not scid:
@@ -35,7 +37,7 @@ class TrackItem(Implicit, Item):
         sc = get_soundcloud_api()
         try:
             trackdata = sc.tracks(self.soundcloud_id)()
-        except SoundcloudException as e:
+        except SoundcloudException:
             raise NotFound(self.context, 'no soundcloud track with id: "%s"' %
                            self.soundcloud_id)
         return trackdata
@@ -48,9 +50,8 @@ class TrackItem(Implicit, Item):
         return tuple(list(parent.getPhysicalPath()) + [trav])
 
 
+@implementer(ITraversable)
 class TrackTraverser(object):
-
-    implements(ITraversable)
 
     def __init__(self, context, request=None):
         self.context = context

@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
-import os
-import copy
-import tempfile
-import shutil
-from restkit import RequestError
-from zope.event import notify
-from zope.component import getUtility
-from zope.i18nmessageid import MessageFactory
-from zExceptions import Unauthorized
-# from plone.app.async.interfaces import IAsyncService
+from collective.soundcloud.events import SoundcloudCreatedEvent
+from collective.soundcloud.events import SoundcloudModifiedEvent
+from collective.soundcloud.interfaces import ISoundcloudItem
+from collective.soundcloud.utils import get_soundcloud_api
+from plone.app.async.interfaces import IAsyncService
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-import yafowil.loader
+from restkit import RequestError
 from yafowil.base import UNSET
 from yafowil.controller import Controller
 from yafowil.yaml import parse_from_YAML
-from collective.soundcloud.interfaces import ISoundcloudItem
-from collective.soundcloud.utils import get_soundcloud_api
-from collective.soundcloud.traverser import TrackItem
-from collective.soundcloud.events import (
-    SoundcloudCreatedEvent,
-    SoundcloudModifiedEvent
-)
+from zExceptions import Unauthorized
+from zope.component import getUtility
+from zope.event import notify
+from zope.i18nmessageid import MessageFactory
+
+import copy
+import os
+import shutil
+import tempfile
+import yafowil.loader
+
+
+yafowil.loader  # flake8 happiness
 
 _ = MessageFactory('collective.soundcloud')
 
@@ -189,9 +190,14 @@ class SoundcloudAddEdit(BrowserView):
         if self.request.method != 'POST':
             raise Unauthorized('POST only')
         upload_track_data = self._prepare_trackdata(widget, data)
-        # async = getUtility(IAsyncService)
-        # async.queueJob(async_upload_handler, self.context, upload_track_data,
-        #                self.mode, self.soundcloud_id)
+        async = getUtility(IAsyncService)
+        async.queueJob(
+            async_upload_handler,
+            self.context,
+            upload_track_data,
+            self.mode,
+            self.soundcloud_id
+        )
         self.request.response.redirect(self.context.absolute_url() + '/view')
 
     @property

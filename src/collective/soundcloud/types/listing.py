@@ -1,25 +1,17 @@
-from zope.interface import (
-    implementer,
-    invariant,
-    Invalid,
-)
-from zope.component import adapter
-from zope import schema
-from zope.schema.vocabulary import (
-    SimpleVocabulary,
-    SimpleTerm,
-)
-from zope.publisher.browser import BrowserView
-from zope.i18nmessageid import MessageFactory
-from plone.autoform import directives as form
+# -*- coding: utf-8 -*-
+from collective.soundcloud.utils import get_soundcloud_api
+from collective.soundcloud.utils import player_url
+from collective.soundcloud.utils import validate_set
+from collective.soundcloud.utils import validate_user
 from plone.supermodel import model
-from collective.soundcloud.utils import (
-    get_soundcloud_api,
-    player_url,
-    validate_user,
-    validate_set,
-)
-import operator
+from zope import schema
+from zope.i18nmessageid import MessageFactory
+from zope.interface import Invalid
+from zope.interface import invariant
+from zope.publisher.browser import BrowserView
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
+
 
 _ = MessageFactory("collective.soundcloud")
 
@@ -41,7 +33,9 @@ PLAYER = u"http://api.soundcloud.com/tracks/%s"
 
 
 class TypeInvariantInvalid(Invalid):
-    __doc__ = _(u"If type is user either 'you' or a username must be provided.")
+    __doc__ = _(
+        u"If type is user either 'you' or a username must be provided."
+    )
 
 
 class IListing(model.Schema):
@@ -84,7 +78,6 @@ class IListing(model.Schema):
 
     @invariant
     def validate_listing_type(data):
-        sc = get_soundcloud_api()
         if data.sc_type == u'user':
             if data.sc_you or data.sc_id:
                 if data.sc_id:

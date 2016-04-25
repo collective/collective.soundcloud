@@ -1,12 +1,9 @@
-from zope.interface import implements
-from zope.lifecycleevent import (
-    ObjectCreatedEvent,
-    ObjectModifiedEvent
-)
-from zope.lifecycleevent.interfaces import (
-    IObjectCreatedEvent,
-    IObjectModifiedEvent
-)
+# -*- coding: utf-8 -*-
+from zope.interface import implementer
+from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 class ISoundcloudCreatedEvent(IObjectCreatedEvent):
@@ -17,9 +14,11 @@ class ISoundcloudModifiedEvent(IObjectModifiedEvent):
     """Existing asset modified in soundcloud by Plone"""
 
 
+@implementer(ISoundcloudCreatedEvent)
 class SoundcloudCreatedEvent(ObjectCreatedEvent):
-    implements(ISoundcloudCreatedEvent)
+    """ """
 
 
+@implementer(ISoundcloudModifiedEvent)
 class SoundcloudModifiedEvent(ObjectCreatedEvent):
-    implements(ISoundcloudModifiedEvent)
+    """ """

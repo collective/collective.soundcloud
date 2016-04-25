@@ -1,10 +1,11 @@
-import re
+# -*- coding: utf-8 -*-
 from collective.soundcloud.settings import get_soundcloud_settings
-from soundcloudapi import (
-    AuthInfo,
-    Soundcloud,
-    SoundcloudException,
-)
+from soundcloudapi import AuthInfo
+from soundcloudapi import Soundcloud
+from soundcloudapi import SoundcloudException
+
+import re
+
 
 URL_1_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?$')
 URL_2_OR_MORE = re.compile(r'https?://soundcloud.com/\S+?/\S+?$')
@@ -44,27 +45,41 @@ def _validate_url_or_id(scid, name, match, notmatch, fetcher):
         fetcher(scid)
         # XXX check error in fetched result?
     except SoundcloudException:
-        return 1, '%s Id is not valid according to soundcloud.com.' % name, None
+        return (
+            1,
+            '%s Id is not valid according to soundcloud.com.' % name,
+            None
+        )
     return 0, 'OK', None
 
 
 def validate_user(userid):
     sc = get_soundcloud_api()
-    return _validate_url_or_id(userid, 'User',
-                               URL_1_OR_MORE, URL_2_OR_MORE,
-                               sc.users)
+    return _validate_url_or_id(
+        userid,
+        'User',
+        URL_1_OR_MORE,
+        URL_2_OR_MORE,
+        sc.users
+    )
 
 
 def validate_track(trackid):
     sc = get_soundcloud_api()
     # XXX buggy, finally we need tests
-    return _validate_url_or_id(trackid, 'Track',
-                               URL_2_OR_MORE, URL_MORE_THAN_2,
-                               sc.tracks)
+    return _validate_url_or_id(
+        trackid,
+        'Track',
+        URL_2_OR_MORE, URL_MORE_THAN_2,
+        sc.tracks
+    )
 
 
 def validate_set(setid):
     sc = get_soundcloud_api()
-    return _validate_url_or_id(setid, 'Set',
-                               URL_3_OR_MORE, URL_MORE_THAN_3,
-                               sc.playlists)
+    return _validate_url_or_id(
+        setid,
+        'Set',
+        URL_3_OR_MORE, URL_MORE_THAN_3,
+        sc.playlists
+    )

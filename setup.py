@@ -35,7 +35,6 @@ setup(
     install_requires=[
         'Plone',
         'plone.app.async',
-        'plone.app.referenceablebehavior',
         'setuptools',
         'soundcloudapi',
         'yafowil.plone',
