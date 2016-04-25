@@ -4,9 +4,14 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n">
+
   <includeDependencies package="." />
-  <include package=".addedit" />
+
+  <include package=".behaviors" />
   <include package=".types" />
+
+  <include file="vocabularies.zcml" />
+
   <genericsetup:registerProfile
       description="collective.soundcloud itegrates Plone with soundcloud.com"
       directory="profile"
