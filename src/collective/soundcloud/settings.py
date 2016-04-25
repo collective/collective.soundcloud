@@ -40,7 +40,7 @@ class ISettings(Interface):
     )
 
 
-def get_soundcloud_settings(self):
+def get_soundcloud_settings():
     registry = getUtility(IRegistry)
     settings = registry.forInterface(ISettings)
     return settings
