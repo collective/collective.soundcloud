@@ -37,6 +37,7 @@ class ISoundCloudCategorization(model.Schema):
     tags = schema.List(
         title=_(u'label_tags', default=u'Tags'),
         required=False,
+        value_type=schema.TextLine(),
     )
 
     bpm = schema.TextLine(
