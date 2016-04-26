@@ -2,6 +2,7 @@
 from phonogen.site import _
 from plone.app.contenttypes.browser.utils import Utils
 from plone.app.z3cform.widget import DatetimeFieldWidget
+from plone.z3cform.textlines import TextLinesFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile import field as namedfile
@@ -29,6 +30,7 @@ class ISoundCloudCategorization(model.Schema):
         required=False,
     )
 
+    directives.widget('tags', TextLinesFieldWidget)
     tags = schema.List(
         title=_(u'label_tags', default=u'Tags'),
         required=False,

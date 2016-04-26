@@ -23,6 +23,7 @@
  <property name="model_source"></property>
  <property name="model_file">plone.app.contenttypes.schema:document.xml</property>
  <property name="behaviors" purge="false">
+  <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
   <element value="soundcloud.basic"/>
   <element value="soundcloud.categorization"/>
   <element value="soundcloud.labeldata"/>
