@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<object name="collective.soundcloud.track" meta_type="Dexterity FTI"
+<object name="soundcloud.track" meta_type="Dexterity FTI"
    i18n:domain="collective.soundcloud" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <!-- Basic metadata -->

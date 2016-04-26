@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 from collective.soundcloud import _
-from plone.app.contenttypes.browser.utils import Utils
-from plone.app.z3cform.widget import DatetimeFieldWidget
-from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.namedfile import field as namedfile
 from plone.supermodel import model
-from Products.Five.browser import BrowserView
 from zope import schema
 from zope.interface import implementer
 from zope.interface import provider
-import json
+from zope.interface import Attribute
 
 
 @provider(IFormFieldProvider)
@@ -23,8 +18,10 @@ class ISoundCloudLabelData(model.Schema):
         'release_day',
         'release_month',
         'release_year',
-        'downloadable',
-        'trackdata',
+        'isrc',
+        'license',
+        'buy_link',
+        'video_link',
     ]
 
     label = schema.TextLine(
@@ -79,13 +76,67 @@ class SoundCloudLabelData(object):
         self.context = context
 
     @property
+    def label(self):
+        return self.context.label
+
+    @label.setter
+    def label(self, value):
+        self.context.label = value
+
+    @property
     def release_date(self):
         return self.context.release_date
 
-    @property.setter
+    @release_date.setter
     def release_date(self, value):
         self.context.release_date = value
 
     @property
-    def release_day(self)
-        self.context.release_date.day  # XXX implement me
+    def release_day(self):
+        if not self.context.release_date:
+            return "None"
+        return self.context.release_date.day
+
+    @property
+    def release_month(self):
+        if not self.context.release_date:
+            return "None"
+        return self.context.release_date.month
+
+    @property
+    def release_year(self):
+        if not self.context.release_date:
+            return "None"
+        return self.context.release_date.year
+
+    @property
+    def isrc(self):
+        return self.context.isrc
+
+    @isrc.setter
+    def isrc(self, value):
+        self.context.isrc = value
+
+    @property
+    def license(self):
+        return self.context.license
+
+    @license.setter
+    def license(self, value):
+        self.context.license = value
+
+    @property
+    def buy_link(self):
+        return self.context.buy_link
+
+    @buy_link.setter
+    def buy_link(self, value):
+        self.context.buy_link = value
+
+    @property
+    def video_link(self):
+        return self.context.video_link
+
+    @video_link.setter
+    def video_link(self, value):
+        self.context.video_link = value

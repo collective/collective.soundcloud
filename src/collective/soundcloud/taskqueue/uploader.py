@@ -4,12 +4,20 @@ from collective.soundcloud.events import SoundcloudCreatedEvent
 from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.utils import get_soundcloud_api
 from zope.event import notify
+from plone.behavior.interfaces import IBehaviorAssignable
 
 
 class SoundcloudUploaderView(BrowserView):
 
     def async_upload_handler(self):
         sc = get_soundcloud_api()
+
+        # fetch fields and blob
+        assignable = IBehaviorAssignable(self, None)
+        if assignable is not None:
+            for behavior_registration in assignable.enumerateBehaviors():
+                pass
+
         if self.soundcloud_id:
             # we're are in soundcloud edit mode,
             # iow this was already uploaded to soundcloud
@@ -20,6 +28,11 @@ class SoundcloudUploaderView(BrowserView):
         else:
             # no soundcloud upload so far.
             tracks = sc.tracks()
+
+        assignable = IBehaviorAssignable(self, None)
+        if assignable is not None:
+            for behavior_registration in assignable.enumerateBehaviors():
+                pass
 
         if tfname:
             tdir = os.path.dirname(tfname)
