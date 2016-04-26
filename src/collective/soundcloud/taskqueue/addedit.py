@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-SC_FIELDS = {
-    '': '',
-}
-
 
 def queue_upload(obj, descriptions=None):
     """if descriptions is None, this is an add

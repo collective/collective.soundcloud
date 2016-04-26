@@ -8,12 +8,13 @@
   <includeDependencies package="." />
 
   <include package=".behaviors" />
+  <include package=".browser" />
   <include package=".types" />
 
   <include file="vocabularies.zcml" />
 
   <genericsetup:registerProfile
-      description="collective.soundcloud itegrates Plone with soundcloud.com"
+      description="collective.soundcloud integrates Plone with soundcloud.com"
       directory="profile"
       name="default"
       provides="Products.GenericSetup.interfaces.EXTENSION"

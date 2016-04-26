@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from phonogen.site import _
+from collective.soundcloud import _
 from plone.app.contenttypes.browser.utils import Utils
 from plone.app.z3cform.widget import DatetimeFieldWidget
 from plone.autoform import directives

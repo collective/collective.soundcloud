@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from phonogen.site import _
-from plone.app.contenttypes.browser.utils import Utils
+from collective.soundcloud import _
 from plone.app.z3cform.widget import DatetimeFieldWidget
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile import field as namedfile
 from plone.supermodel import model
-from Products.Five.browser import BrowserView
+from Products.Five.browser import SoundCloudBasicView
 from zope import schema
 from zope.interface import implementer
 from zope.interface import provider
@@ -17,6 +16,13 @@ import json
 class ISoundCloudBasic(model.Schema):
     """Adds SoundCloud specific fields
     """
+
+    SOUNDCLOUD_ACCESSORS = [
+        'asset_data',
+        'sharing',
+        'downloadable',
+        'trackdata',
+    ]
 
     # Preview File for SoundCloud
     asset_data = namedfile.NamedBlobFile(
@@ -51,22 +57,10 @@ class SoundCloudBasic(object):
     def __init__(self, context):
         self.context = context
 
+    @property
+    def asset_data(self):
+        return self.context.asset_data
 
-class SoundCloudBasicView(Utils):
-
-    def __init__(self, context, request):
-        super(ProTraxxFileView, self).__init__(context, request)
-
-    def is_videotype(self):
-        ct = self.context.file.contentType
-        return 'video/' in ct
-
-    def is_audiotype(self):
-        ct = self.context.file.contentType
-        return 'audio/' in ct
-
-    def get_mimetype_icon(self):
-        return super(ProTraxxFileView, self).getMimeTypeIcon(self.context.file)
-
-    def track(self):
-        return json.loads(self.context.trackdata)
+    @asset_data.setter
+    def asset_data(self, value):
+        self.context.asset_data = value
