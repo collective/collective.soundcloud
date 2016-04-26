@@ -43,7 +43,6 @@ class SoundcloudUploaderView(BrowserView):
         else:
             # no soundcloud upload so far.
             tracks = sc.tracks()
-
         track_data = {}
         for iface, accessor in accessors:
             if changed_fields and accessor not in changed_fields:
@@ -54,10 +53,15 @@ class SoundcloudUploaderView(BrowserView):
                 # pass an open blob in
                 track_data[accessor] = StringIO(track_data[accessor].data)
                 track_data[accessor].name = self.context.getId()
-            elif not isinstance(track_data[accessor], basestring):
-                track_data[accessor] = str(track_data[accessor])
             elif isinstance(track_data[accessor], unicode):
                 track_data[accessor] = track_data[accessor].encode('utf-8')
+            elif isinstance(track_data[accessor], list):
+                track_data[accessor] =  ' '.join(
+                    ['"{0}"'.format(_.encode('utf-8').strip().replace('"', '\\"'))
+                    for _ in track_data[accessor]]
+                )
+            elif not isinstance(track_data[accessor], basestring):
+                track_data[accessor] = str(track_data[accessor])
         if not track_data:
             return
         track_data = self.upload(tracks, track_data)

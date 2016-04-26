@@ -48,6 +48,7 @@ class ISoundCloudLabelData(model.Schema):
 
     isrc = schema.TextLine(
         title=_(u'label_isrc', default=u'ISRC'),
+        description=_(u'Must be of format CC-XXX-YY-NNNNN'),
         required=False,
     )
 

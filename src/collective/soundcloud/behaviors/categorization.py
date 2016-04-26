@@ -41,7 +41,7 @@ class ISoundCloudCategorization(model.Schema):
         value_type=schema.TextLine(),
     )
 
-    bpm = schema.TextLine(
+    bpm = schema.Float(
         title=_(u'label_bpm', default=u'BPM'),
         required=False,
     )

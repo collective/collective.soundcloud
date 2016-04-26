@@ -17,6 +17,7 @@ class ISoundCloudBasic(model.Schema):
     """
 
     directives.soundcloud(
+        'title',
         'asset_data',
         'sharing',
         'downloadable',
@@ -66,6 +67,10 @@ class SoundCloudBasic(object):
 
     def __init__(self, context):
         self.context = context
+
+    @property
+    def title(self):
+        return self.context.title
 
     @property
     def asset_data(self):
