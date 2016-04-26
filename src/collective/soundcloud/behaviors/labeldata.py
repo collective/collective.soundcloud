@@ -7,6 +7,7 @@ from zope import schema
 from zope.interface import implementer
 from zope.interface import provider
 from zope.interface import Attribute
+from zope.interface import Interface
 
 
 @provider(IFormFieldProvider)
@@ -66,6 +67,10 @@ class ISoundCloudLabelData(model.Schema):
         title=_(u'label_video_link', default=u'Video Link'),
         required=False,
     )
+
+
+class ISoundCloudLabelDataMarker(Interface):
+    """ """
 
 
 @implementer(ISoundCloudLabelData)

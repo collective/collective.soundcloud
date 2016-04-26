@@ -7,6 +7,7 @@ from plone.supermodel import model
 from plone.z3cform.textlines import TextLinesFieldWidget
 from zope import schema
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.interface import provider
 
 
@@ -44,6 +45,10 @@ class ISoundCloudCategorization(model.Schema):
         title=_(u'label_bpm', default=u'BPM'),
         required=False,
     )
+
+
+class ISoundCloudCategorizationMarker(Interface):
+    """ """
 
 
 @implementer(ISoundCloudCategorization)

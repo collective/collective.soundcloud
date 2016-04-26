@@ -7,6 +7,7 @@ from plone.namedfile import field as namedfile
 from plone.supermodel import model
 from zope import schema
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.interface import provider
 
 
@@ -52,6 +53,10 @@ class ISoundCloudBasic(model.Schema):
         title=_(u'label_soundcloud_id', default=u'Soundcloud ID'),
         required=False,
     )
+
+
+class ISoundCloudBasicMarker(Interface):
+    """ """
 
 
 @implementer(ISoundCloudBasic)
