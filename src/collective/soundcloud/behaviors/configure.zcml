@@ -9,8 +9,8 @@
     title="SoundCloud Basic Data"
     description="Adds Basic Fields for SoundCloud Support"
     provides=".basic.ISoundCloudBasic"
-    marker=".basic.ISoundCloudBasic"
-    factory=".basic.ISoundCloudBasic"
+    marker=".basic.ISoundCloudBasicMarker"
+    factory=".basic.SoundCloudBasic"
     />
 
   <plone:behavior
@@ -18,8 +18,8 @@
     title="SoundCloud Categorization"
     description="Adds SoundCloud Categorization Fields"
     provides=".categorization.ISoundCloudCategorization"
-    marker=".categorization.ISoundCloudCategorization"
-    factory=".categorization.ISoundCloudCategorization"
+    marker=".categorization.ISoundCloudCategorizationMarker"
+    factory=".categorization.SoundCloudCategorization"
     />
 
   <plone:behavior
@@ -27,8 +27,8 @@
     title="SoundCloud Record Label Fields"
     description="Adds fields for record labels"
     provides=".labeldata.ISoundCloudLabelData"
-    marker=".labeldata.ISoundCloudLabelData"
-    factory=".labeldata.ISoundCloudLabelData"
+    marker=".labeldata.ISoundCloudLabelDataMarker"
+    factory=".labeldata.SoundCloudLabelData"
     />
 
 </configure>
