@@ -54,5 +54,5 @@ def get_soundcloud_accessors(context):
         schema = behavior_registration.interface
         for tgv in mergedTaggedValueList(schema, SOUNDCLOUD_KEY):
             for accessor in tgv.accessors:
-                accessors.append = behavior_registration.interface, accessor
+                accessors.append((schema, accessor,))
     return accessors

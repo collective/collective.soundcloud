@@ -6,6 +6,7 @@ from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.utils import get_soundcloud_api
 from Products.Five import BrowserView
 from restkit import RequestError
+from StringIO import StringIO
 from zope.event import notify
 
 import logging
@@ -27,9 +28,7 @@ class SoundcloudUploaderView(BrowserView):
         sc = get_soundcloud_api()
         filefield = get_soundfile_field(self.context)
         accessors = get_soundcloud_accessors(self.context)
-        import pdb; pdb.set_trace()
-
-        file_has_changed = filefield in changed_fields
+        file_has_changed = changed_fields and filefield in changed_fields
         mode = 'edit' if self.context.soundcloud_id else 'add'
         # fetch blob
         if self.context.soundcloud_id:
@@ -44,24 +43,28 @@ class SoundcloudUploaderView(BrowserView):
             # no soundcloud upload so far.
             tracks = sc.tracks()
 
-        upload_track_data = {}
+        track_data = {}
         for iface, accessor in accessors:
+            if changed_fields and accessor not in changed_fields:
+                continue
             adapter = iface(self.context)
-            upload_track_data[accessor] = getattr(adapter, accessor)
-
-        if file_has_changed:
-            # fetch blob as open file-like object
-            file_handle = None  # XXX
-            upload_track_data['asset_data'] = file_handle
-        upload_track_data = self.upload(tracks, upload_track_data)
-        setattr(self.context, 'trackdata', upload_track_data)
-        setattr(self.context, 'soundcloud_id', upload_track_data['id'])
+            track_data[accessor] = getattr(adapter, accessor)
+            if accessor == filefield:
+                # pass an open blob in
+                track_data[accessor] = StringIO(track_data[accessor].data)
+                track_data[accessor].name = self.context.getId()
+        if not track_data:
+            return
+        track_data = self.upload(tracks, track_data)
+        setattr(self.context, 'trackdata', track_data)
+        setattr(self.context, 'soundcloud_id', track_data['id'])
         self.context._p_changed = 1
         if mode == 'edit':
             notify(SoundcloudModifiedEvent(self.context))
         else:
             notify(SoundcloudCreatedEvent(self.context))
+        return track_data
 
     def __call__(self):
-        self.async_upload_handler()
-        return 'foo'
+        self.request.response.setHeader('Content-Type', 'application/json')
+        return self.async_upload_handler([])
