@@ -37,8 +37,6 @@ setup(
         'Plone',
         'setuptools',
         'soundcloudapi',
-        'yafowil.plone',
-        'yafowil.yaml',
     ],
     entry_points="""
     [z3c.autoinclude.plugin]
