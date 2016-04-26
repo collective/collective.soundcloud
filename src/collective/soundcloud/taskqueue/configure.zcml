@@ -4,6 +4,13 @@
     i18n_domain="collective.soundcloud">
 
   <browser:page
+    name="soundcloud_uploader_test"
+    for="*"
+    class=".uploader.SoundcloudUploaderView"
+    permission="cmf.ModifyPortalContent"
+  />
+
+  <browser:page
     name="soundcloud_uploader"
     for="*"
     layer="collective.taskqueue.interfaces.ITaskQueueLayer"
