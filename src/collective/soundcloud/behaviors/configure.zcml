@@ -7,10 +7,28 @@
   <plone:behavior
     name="soundcloud.basic"
     title="SoundCloud Basic Data"
-    description="Adds SoundCloud specific fields"
+    description="Adds Basic Fields for SoundCloud Support"
     provides=".basic.ISoundCloudBasic"
     marker=".basic.ISoundCloudBasic"
     factory=".basic.ISoundCloudBasic"
+    />
+
+  <plone:behavior
+    name="soundcloud.categorization"
+    title="SoundCloud Categorization"
+    description="Adds SoundCloud Categorization Fields"
+    provides=".categorization.ISoundCloudCategorization"
+    marker=".categorization.ISoundCloudCategorization"
+    factory=".categorization.ISoundCloudCategorization"
+    />
+
+  <plone:behavior
+    name="soundcloud.labeldata"
+    title="SoundCloud Record Label Fields"
+    description="Adds fields for record labels"
+    provides=".labeldata.ISoundCloudCategorization"
+    marker=".labeldata.ISoundCloudCategorization"
+    factory=".labeldata.ISoundCloudCategorization"
     />
 
 </configure>
