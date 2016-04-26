@@ -19,7 +19,6 @@ class ISoundCloudCategorization(model.Schema):
     directives.soundcloud(
         'track_type',
         'genre',
-        'tags',
         'bpm',
     )
 
@@ -32,13 +31,6 @@ class ISoundCloudCategorization(model.Schema):
     genre = schema.TextLine(
         title=_(u'label_genre', default=u'Genre'),
         required=False,
-    )
-
-    widget('tags', TextLinesFieldWidget)
-    tags = schema.List(
-        title=_(u'label_tags', default=u'Tags'),
-        required=False,
-        value_type=schema.TextLine(),
     )
 
     bpm = schema.Float(
@@ -74,14 +66,6 @@ class SoundCloudCategorization(object):
     @genre.setter
     def genre(self, value):
         self.context.genre = value
-
-    @property
-    def tags(self):
-        return self.context.tags
-
-    @tags.setter
-    def tags(self, value):
-        self.context.tags = value
 
     @property
     def bpm(self):

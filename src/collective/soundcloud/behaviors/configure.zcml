@@ -23,6 +23,15 @@
     />
 
   <plone:behavior
+    name="soundcloud.tags"
+    title="SoundCloud Tags"
+    description="Adds SoundCloud Tags"
+    provides=".tags.ISoundCloudTags"
+    marker=".tags.ISoundCloudTagsMarker"
+    factory=".tags.SoundCloudTags"
+    />
+
+  <plone:behavior
     name="soundcloud.labeldata"
     title="SoundCloud Record Label Fields"
     description="Adds fields for record labels"
