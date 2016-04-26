@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.soundcloud">
+
+  <browser:page
+    name="soundcloud_uploader"
+    for="*"
+    layer="collective.taskqueue.interfaces.ITaskQueueLayer"
+    class=".uploader.SoundcloudUploaderView"
+    permission="cmf.ModifyPortalContent"
+  />
+
+</configure>
