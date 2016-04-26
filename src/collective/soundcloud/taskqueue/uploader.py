@@ -4,11 +4,12 @@ from collective.soundcloud.directives import get_soundfile_field
 from collective.soundcloud.events import SoundcloudCreatedEvent
 from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.utils import get_soundcloud_api
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five import BrowserView
 from restkit import RequestError
 from StringIO import StringIO
 from zope.event import notify
-from Products.CMFPlone.utils import safe_unicode
+from zope.interface import alsoProvides
 
 import logging
 
@@ -56,9 +57,13 @@ class SoundcloudUploaderView(BrowserView):
             elif isinstance(track_data[accessor], unicode):
                 track_data[accessor] = track_data[accessor].encode('utf-8')
             elif isinstance(track_data[accessor], list):
-                track_data[accessor] =  ' '.join(
-                    ['"{0}"'.format(_.encode('utf-8').strip().replace('"', '\\"'))
-                    for _ in track_data[accessor]]
+                track_data[accessor] = ' '.join(
+                    [
+                        '"{0}"'.format(
+                            _.encode('utf-8').strip().replace('"', '\\"')
+                        )
+                        for _ in track_data[accessor]
+                    ]
                 )
             elif not isinstance(track_data[accessor], basestring):
                 track_data[accessor] = str(track_data[accessor])
@@ -75,5 +80,6 @@ class SoundcloudUploaderView(BrowserView):
         return track_data
 
     def __call__(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
         self.request.response.setHeader('Content-Type', 'application/json')
         return self.async_upload_handler([])
