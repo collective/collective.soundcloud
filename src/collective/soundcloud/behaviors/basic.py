@@ -2,7 +2,7 @@
 from phonogen.site import _
 from plone.app.contenttypes.browser.utils import Utils
 from plone.app.z3cform.widget import DatetimeFieldWidget
-from plone.autoform import directives
+from plone.autoform.directives import omitted
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile import field as namedfile
 from plone.supermodel import model
