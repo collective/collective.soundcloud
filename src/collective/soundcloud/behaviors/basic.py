@@ -28,13 +28,13 @@ class ISoundCloudBasic(model.Schema):
     sharing = schema.Choice(
         title=_(u'label_sharing', default=u'Sharing'),
         required=False,
-        vocabulary='phonogen.protraxx.sharing'
+        vocabulary='soundcloud.sharing'
     )
 
     downloadable = schema.Choice(
         title=_(u'label_downloadable', default=u'Downloads'),
         required=False,
-        vocabulary='phonogen.protraxx.download'
+        vocabulary='soundcloud.download'
     )
 
     trackdata = schema.Text(
@@ -55,7 +55,7 @@ class SoundCloudBasic(object):
 class SoundCloudBasicView(Utils):
 
     def __init__(self, context, request):
-        super(ProTraxxFileView, self).__init__(context, request)
+        super(SoundCloudBasicView, self).__init__(context, request)
 
     def is_videotype(self):
         ct = self.context.file.contentType
@@ -66,7 +66,7 @@ class SoundCloudBasicView(Utils):
         return 'audio/' in ct
 
     def get_mimetype_icon(self):
-        return super(ProTraxxFileView, self).getMimeTypeIcon(self.context.file)
+        return super(SoundCloudBasicView, self).getMimeTypeIcon(self.context.file)
 
     def track(self):
         return json.loads(self.context.trackdata)
