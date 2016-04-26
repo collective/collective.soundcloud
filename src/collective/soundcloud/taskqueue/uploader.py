@@ -82,4 +82,7 @@ class SoundcloudUploaderView(BrowserView):
     def __call__(self):
         alsoProvides(self.request, IDisableCSRFProtection)
         self.request.response.setHeader('Content-Type', 'application/json')
-        return self.async_upload_handler([])
+        changed_fields = []
+        if self.request.form.get('asset_changed', 'False') == 'True':
+            changed_fields.append('asset_data')
+        return self.async_upload_handler(changed_fields)
