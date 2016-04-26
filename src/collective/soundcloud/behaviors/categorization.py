@@ -40,8 +40,8 @@ class ISoundCloudCategorization(model.Schema):
     )
 
 
-@implementer(IProTraxxFile)
-class ProTraxxFile(object):
+@implementer(ISoundCloudCategorization)
+class SoundCloudCategorization(object):
     """
     """
 
