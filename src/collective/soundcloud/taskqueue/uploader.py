@@ -8,6 +8,7 @@ from Products.Five import BrowserView
 from restkit import RequestError
 from StringIO import StringIO
 from zope.event import notify
+from Products.CMFPlone.utils import safe_unicode
 
 import logging
 
@@ -53,6 +54,10 @@ class SoundcloudUploaderView(BrowserView):
                 # pass an open blob in
                 track_data[accessor] = StringIO(track_data[accessor].data)
                 track_data[accessor].name = self.context.getId()
+            elif not isinstance(track_data[accessor], basestring):
+                track_data[accessor] = str(track_data[accessor])
+            elif isinstance(track_data[accessor], unicode):
+                track_data[accessor] = track_data[accessor].encode('utf-8')
         if not track_data:
             return
         track_data = self.upload(tracks, track_data)
