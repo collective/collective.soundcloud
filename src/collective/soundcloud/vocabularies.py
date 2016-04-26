@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from phonogen.site import _
-from zope.interface import provider
+from collective.soundcloud import _
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -49,7 +48,10 @@ directlyProvides(LicensesVocabulary, IVocabularyFactory)
 def SharingVocabulary(context):
     types = [
         ('public',
-            _('public', default=u'Public - Makes this track  available to everyone')
+            _(
+                'public',
+                default=u'Public - Makes this track  available to everyone'
+            )
          ),
         ('private',
             _('private', default=u'Private - Only you have access')

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.soundcloud import _
+from collective.soundcloud import directives
 from plone.autoform.directives import widget
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
@@ -14,12 +15,12 @@ class ISoundCloudCategorization(model.Schema):
     """Adds SoundCloud specific fields
     """
 
-    SOUNDCLOUD_ACCESSORS = [
+    directives.soundcloud(
         'track_type',
         'genre',
         'tags',
         'bpm',
-    ]
+    )
 
     track_type = schema.Choice(
         title=_(u'label_track_type', default=u'Track Type'),

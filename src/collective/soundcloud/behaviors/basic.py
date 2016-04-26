@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.soundcloud import _
+from collective.soundcloud import directives
 from plone.autoform.directives import omitted
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile import field as namedfile
@@ -14,12 +15,12 @@ class ISoundCloudBasic(model.Schema):
     """Adds SoundCloud specific fields
     """
 
-    SOUNDCLOUD_ACCESSORS = [
+    directives.soundcloud(
         'asset_data',
         'sharing',
         'downloadable',
-    ]
-    SOUNDCLOUD_FILE = 'asset_data'
+    )
+    directives.soundfile('asset_data')
 
     # Preview File for SoundCloud
     asset_data = namedfile.NamedBlobFile(

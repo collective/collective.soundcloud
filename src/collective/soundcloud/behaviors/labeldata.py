@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.soundcloud import _
+from collective.soundcloud import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
 from zope import schema
@@ -13,7 +14,7 @@ class ISoundCloudLabelData(model.Schema):
     """Adds SoundCloud Record Label specific fields
     """
 
-    SOUNDCLOUD_ACCESSORS = [
+    directives.soundcloud(
         'label',
         'release_day',
         'release_month',
@@ -22,7 +23,7 @@ class ISoundCloudLabelData(model.Schema):
         'license',
         'buy_link',
         'video_link',
-    ]
+    )
 
     label = schema.TextLine(
         title=_(u'label_label', default=u'Label'),
