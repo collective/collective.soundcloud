@@ -8,8 +8,6 @@ from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from soundcloudapi import AuthInfo
-from soundcloudapi import SoundcloudException
 from z3c.form import button
 from z3c.form import form
 from zope import schema
@@ -17,6 +15,8 @@ from zope.component import getUtility
 from zope.interface import Interface
 from plone.protect.interfaces import IDisableCSRFProtection
 from zope.interface import alsoProvides
+
+import soundcloud
 
 
 class ISettings(Interface):
@@ -48,16 +48,6 @@ def get_soundcloud_settings():
     return settings
 
 
-def _get_auth_info(client_id, client_secret, context):
-    return AuthInfo(
-        client_id,
-        client_secret,
-        redirect_uri='{0}/soundcloud_redirect_handler'.format(
-            context.absolute_url()
-        )
-    )
-
-
 class SettingsEditForm(RegistryEditForm):
     """ Define form logic
     """
@@ -83,13 +73,15 @@ class SettingsEditForm(RegistryEditForm):
             )
             self.request.response.redirect(self.request.getURL())
             return
-        authinfo = _get_auth_info(
-            data.get('client_id'),
-            data.get('client_secret'),
-            self.context
+        client = soundcloud.Client(
+            client_id=data.get('client_id'),
+            client_secret=data.get('client_secret'),
+            redirect_uri='{0}/soundcloud_redirect_handler'.format(
+                self.context.absolute_url()
+            )
         )
         self.applyChanges(data)
-        self.request.RESPONSE.redirect(authinfo.redirect_url)
+        self.request.RESPONSE.redirect(client.authorize_url())
 
 
 SettingsView = layout.wrap_form(SettingsEditForm, ControlPanelFormWrapper)
@@ -110,20 +102,20 @@ class SoundcloudRedirectHandler(BrowserView):
             )
             return
         settings = get_soundcloud_settings()
-        authinfo = _get_auth_info(
-            settings.client_id,
-            settings.client_secret,
-            self.context
+        client = soundcloud.Client(
+            client_id=settings.client_id,
+            client_secret=settings.client_secret,
         )
-        try:
-            authinfo.token_from_code(code)
-        except SoundcloudException:
+        access_token, expires, scope, refresh_token = client.exchange_token(
+            code=code
+        )
+        if not access_token:
             IStatusMessage(self.request).addStatusMessage(
                 _(u'Soundcloud can not transform code to token.'),
                 "error"
             )
             return
-        settings.token = authinfo.token
+        settings.token = access_token
         IStatusMessage(self.request).addStatusMessage(
             _(u'Soundcloud settings completed and saved.'),
             "info"

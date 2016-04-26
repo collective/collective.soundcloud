@@ -36,9 +36,7 @@ setup(
         'collective.taskqueue',
         'Plone',
         'setuptools',
-        'soundcloudapi',
-        'yafowil.plone',
-        'yafowil.yaml',
+        'soundcloud',
     ],
     entry_points="""
     [z3c.autoinclude.plugin]
