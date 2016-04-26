@@ -26,9 +26,9 @@
     name="soundcloud.labeldata"
     title="SoundCloud Record Label Fields"
     description="Adds fields for record labels"
-    provides=".labeldata.ISoundCloudCategorization"
-    marker=".labeldata.ISoundCloudCategorization"
-    factory=".labeldata.ISoundCloudCategorization"
+    provides=".labeldata.ISoundCloudLabelData"
+    marker=".labeldata.ISoundCloudLabelData"
+    factory=".labeldata.ISoundCloudLabelData"
     />
 
 </configure>
