@@ -36,6 +36,8 @@ def soundcloud_add(obj, event):
 
 
 def soundcloud_modified(obj, event):
+    if getattr(obj.REQUEST, '_sc_upload', False):
+        return
     old_hash = get_hash(obj)
     new_hash = set_hash(obj)
     _queue_upload(obj, asset_changed=old_hash != new_hash)
