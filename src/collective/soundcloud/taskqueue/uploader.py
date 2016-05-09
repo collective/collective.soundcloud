@@ -26,11 +26,11 @@ class SoundcloudUploaderView(BrowserView):
             logger.exception('Can not modify at/upload to Soundcloud!')
             raise
 
-    def _prepare_upload_data(self, filefield, changed_fields):
+    def _prepare_upload_data(self, filefield, asset_data_changed):
         track_data = {}
         accessors = get_soundcloud_accessors(self.context)
         for iface, accessor in accessors:
-            if changed_fields and accessor not in changed_fields:
+            if accessor == 'asset_data' and not asset_data_changed:
                 continue
             adapter = iface(self.context)
             track_data[accessor] = getattr(adapter, accessor)
@@ -51,8 +51,6 @@ class SoundcloudUploaderView(BrowserView):
                 )
             elif not isinstance(track_data[accessor], basestring):
                 track_data[accessor] = str(track_data[accessor])
-        if track_data and 'title' not in track_data:
-            track_data['title'] = self.context.Title()
         return track_data
 
     def _notify(self, mode):
@@ -61,13 +59,12 @@ class SoundcloudUploaderView(BrowserView):
         else:
             notify(SoundcloudCreatedEvent(self.context))
 
-    def _tracks(self, filefield, changed_fields, mode):
-        file_has_changed = changed_fields and filefield in changed_fields
+    def _tracks(self, filefield, asset_data_changed, mode):
         sc = get_soundcloud_api()
         if mode == 'edit':
             # this was already uploaded to soundcloud
             tracks = sc.tracks(self.soundcloud_id)
-            if file_has_changed:
+            if asset_data_changed:
                 # delete what we have at soundcloud and create new entry
                 tracks(delete=True)
                 # create a new one
@@ -81,22 +78,20 @@ class SoundcloudUploaderView(BrowserView):
         setattr(self.context, 'soundcloud_id', track_data['id'])
         self.context._p_changed = 1
 
-    def async_upload_handler(self, changed_fields):
+    def __call__(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        self.request.response.setHeader('Content-Type', 'application/json')
+        asset_data_changed = self.request.form.get('asset_changed', 'False')
+        asset_data_changed = asset_data_changed == 'True'
+
         filefield = get_soundfile_field(self.context)
-        upload_data = self._prepare_upload_data(filefield, changed_fields)
+        upload_data = self._prepare_upload_data(filefield, asset_data_changed)
         if not upload_data:
             return
         mode = 'edit' if self.context.soundcloud_id else 'add'
-        sc_tracks = self._tracks(filefield, changed_fields, mode)
+        sc_tracks = self._tracks(filefield, asset_data_changed, mode)
         track_data = self.upload(sc_tracks, upload_data)
         self._save(track_data)
         self._notify(mode)
         return track_data
-
-    def __call__(self):
-        alsoProvides(self.request, IDisableCSRFProtection)
-        self.request.response.setHeader('Content-Type', 'application/json')
-        changed_fields = []
-        if self.request.form.get('asset_changed', 'False') == 'True':
-            changed_fields.append('asset_data')
-        return self.async_upload_handler(changed_fields)
