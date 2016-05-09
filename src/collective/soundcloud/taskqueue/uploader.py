@@ -51,6 +51,8 @@ class SoundcloudUploaderView(BrowserView):
                 )
             elif not isinstance(track_data[accessor], basestring):
                 track_data[accessor] = str(track_data[accessor])
+        if track_data and 'title' not in track_data:
+            track_data['title'] = self.context.Title()
         return track_data
 
     def _notify(self, mode):
