@@ -19,15 +19,23 @@ class ISoundCloudBasic(model.Schema):
     directives.soundcloud(
         'title',
         'asset_data',
+        'asset_artwork',
         'sharing',
         'downloadable',
     )
     directives.soundfile('asset_data')
+    directives.artworkfile('asset_artwork')
 
     # Preview File for SoundCloud
     asset_data = namedfile.NamedBlobFile(
         title=_(u'label_asset_data',
                 u'Soundcloud Player File (WZ)'),
+        required=False
+    )
+
+    asset_artwork = namedfile.NamedBlobImage(
+        title=_(u'label_asset_data',
+                u'Soundcloud Player Artwork'),
         required=False
     )
 
@@ -79,6 +87,14 @@ class SoundCloudBasic(object):
     @asset_data.setter
     def asset_data(self, value):
         self.context.asset_data = value
+
+    @property
+    def asset_artwork(self):
+        return self.context.asset_artwork
+
+    @asset_artwork.setter
+    def asset_artwork(self, value):
+        self.context.asset_artwork = value
 
     @property
     def sharing(self):

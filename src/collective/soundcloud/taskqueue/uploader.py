@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collective.soundcloud.directives import get_soundcloud_accessors
 from collective.soundcloud.directives import get_soundfile_field
+from collective.soundcloud.directives import get_artworkfile_field
 from collective.soundcloud.events import SoundcloudCreatedEvent
 from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.utils import get_soundcloud_api
@@ -26,7 +27,7 @@ class SoundcloudUploaderView(BrowserView):
             logger.exception('Can not modify at/upload to Soundcloud!')
             raise
 
-    def _prepare_upload_data(self, filefield, asset_data_changed):
+    def _prepare_upload_data(self, filefield, artworkfield, asset_data_changed):
         track_data = {}
         accessors = get_soundcloud_accessors(self.context)
         for iface, accessor in accessors:
@@ -38,6 +39,12 @@ class SoundcloudUploaderView(BrowserView):
                 continue
             track_data[accessor] = value
             if accessor == filefield:
+                # pass an open blob in
+                track_data[accessor] = StringIO(track_data[accessor].data)
+                track_data[accessor].name = self.context.getId()
+                continue
+
+            if accessor == artworkfield:
                 # pass an open blob in
                 track_data[accessor] = StringIO(track_data[accessor].data)
                 track_data[accessor].name = self.context.getId()
@@ -64,7 +71,7 @@ class SoundcloudUploaderView(BrowserView):
         else:
             notify(SoundcloudCreatedEvent(self.context))
 
-    def _tracks(self, filefield, asset_data_changed, mode):
+    def _tracks(self, filefield, artworkfield, asset_data_changed, mode):
         sc = get_soundcloud_api()
         if mode == 'edit':
             # this was already uploaded to soundcloud
@@ -95,11 +102,14 @@ class SoundcloudUploaderView(BrowserView):
         asset_data_changed = asset_data_changed == 'True'
 
         filefield = get_soundfile_field(self.context)
-        upload_data = self._prepare_upload_data(filefield, asset_data_changed)
+        artworkfield = get_artworkfile_field(self.context)
+        upload_data = self._prepare_upload_data(
+            filefield, artworkfield, asset_data_changed
+        )
         if not upload_data:
             return
         mode = 'edit' if self.context.soundcloud_id else 'add'
-        sc_tracks = self._tracks(filefield, asset_data_changed, mode)
+        sc_tracks = self._tracks(filefield, artworkfield, asset_data_changed, mode)
         track_data = self.upload(sc_tracks, upload_data)
         self._save(track_data)
         self._notify(mode)
