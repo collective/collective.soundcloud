@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope.interface import implementer
 from zope.lifecycleevent import ObjectCreatedEvent
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 

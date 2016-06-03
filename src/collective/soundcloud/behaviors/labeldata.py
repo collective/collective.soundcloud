@@ -101,19 +101,19 @@ class SoundCloudLabelData(object):
     @property
     def release_day(self):
         if not self.context.release_date:
-            return "None"
+            return None
         return self.context.release_date.day
 
     @property
     def release_month(self):
         if not self.context.release_date:
-            return "None"
+            return None
         return self.context.release_date.month
 
     @property
     def release_year(self):
         if not self.context.release_date:
-            return "None"
+            return None
         return self.context.release_date.year
 
     @property

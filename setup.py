@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 import os
 
-version = '1.0a-dev'
+version = '1.0'
 shortdesc = 'Soundcloud Integration for Plone'
 longdesc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()
@@ -36,7 +36,7 @@ setup(
         'collective.taskqueue',
         'Plone',
         'setuptools',
-        'soundcloudapi',
+        'soundcloud',
     ],
     entry_points="""
     [z3c.autoinclude.plugin]

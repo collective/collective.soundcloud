@@ -1,5 +1,3 @@
 <object name="portal_types">
-  <object name="soundcloud.alias" meta_type="Dexterity FTI" />
-  <object name="soundcloud.listing" meta_type="Dexterity FTI" />
   <object name="soundcloud.file" meta_type="Dexterity FTI" />
 </object>

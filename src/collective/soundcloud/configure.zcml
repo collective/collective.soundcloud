@@ -8,9 +8,7 @@
   <includeDependencies package="." />
 
   <include package=".behaviors" />
-  <include package=".browser" />
   <include package=".taskqueue" />
-  <include package=".types" />
 
   <include file="vocabularies.zcml" />
 
@@ -25,20 +23,6 @@
       directory="resources"
       layer="collective.soundcloud.interfaces.SoundcloudLayer"
       name="collective.soundcloud"
-  />
-  <adapter
-      factory=".traverser.TrackTraverser"
-      for="*
-           collective.soundcloud.interfaces.SoundcloudLayer"
-      name="soundcloud"
-  />
-  <browser:page
-      class=".types.alias.View"
-      for=".interfaces.ISoundcloudPublisher"
-      layer="collective.soundcloud.interfaces.SoundcloudLayer"
-      name="view"
-      permission="zope2.View"
-      template="types/alias.pt"
   />
   <browser:page
       class=".settings.SettingsView"

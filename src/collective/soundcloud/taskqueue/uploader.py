@@ -6,7 +6,7 @@ from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.utils import get_soundcloud_api
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five import BrowserView
-from restkit import RequestError
+#from restkit import RequestError
 from StringIO import StringIO
 from zope.event import notify
 from zope.interface import alsoProvides
@@ -22,7 +22,8 @@ class SoundcloudUploaderView(BrowserView):
     def upload(self, tracks, upload_track_data):
         try:
             return tracks(upload_track_data)
-        except RequestError:
+        except Exception as e:
+            import ipdb; ipdb.set_trace()
             logger.exception('Can not modify at/upload to Soundcloud!')
             raise
 
