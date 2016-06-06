@@ -25,13 +25,19 @@ class ISettings(Interface):
 
     client_id = schema.TextLine(
         title=_(u'Client ID'),
-        description=_(u'OAuth 2 Client Id'),
+        description=_(
+            u'OAuth 2 Client Id, see http://soundcloud.com/you/apps, '
+            u'will be stored here.'
+        ),
         required=True,
     )
 
     client_secret = schema.TextLine(
         title=_(u'Client Secret'),
-        description=_(u'OAuth 2 Client Secret'),
+        description=_(
+            u'OAuth 2 Client Secret. '
+            u'It does not get stored in the settings.'
+        ),
         required=True,
     )
 
@@ -114,7 +120,7 @@ class SoundcloudRedirectHandler(BrowserView):
             )
         )
         try:
-            access_t, expires, scope, refresh_t = client.exchange_token(
+            result = client.exchange_token(
                 code=code
             )
         except requests.HTTPError as e:
@@ -127,7 +133,8 @@ class SoundcloudRedirectHandler(BrowserView):
                 "error"
             )
             return
-        settings.token = access_t
+        settings.token = result.obj['access_token']
+        settings.client_secret = u'a token was stored'
         IStatusMessage(self.request).addStatusMessage(
             _(u'Soundcloud settings completed and saved.'),
             "info"
