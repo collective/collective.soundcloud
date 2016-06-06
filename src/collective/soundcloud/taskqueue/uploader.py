@@ -11,6 +11,7 @@ from zope.event import notify
 from zope.interface import alsoProvides
 
 import logging
+import requests
 import soundcloud
 
 
@@ -68,7 +69,16 @@ class SoundcloudUploaderView(BrowserView):
         return track
 
     def _remove_if_exists(self, client, upload_track_data):
-        pass
+        scid = getattr(self.context, 'soundcloud_id')
+        if not scid:
+            return
+        try:
+            client.delete(
+                '/tracks/{0}'.format(scid),
+            )
+        except requests.HTTPError:
+            # ignore - looks like scid does not exists
+            return
 
     def __call__(self):
         self.request._sc_upload = True
@@ -87,7 +97,7 @@ class SoundcloudUploaderView(BrowserView):
         )
         if mode == 'edit':
             self._remove_if_exists(client, upload_data)
-        track_data = self._upload(client, upload_data, mode)
-        self._save(track_data)
+        resource = self._upload(client, upload_data, mode)
+        self._save(resource.obj)
         self._notify(mode)
         return ''
