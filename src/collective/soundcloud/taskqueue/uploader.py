@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class SoundcloudUploaderView(BrowserView):
 
-    def _prepare_upload_data(self, filefield):
+    def _prepare_upload_data(self, filefield, ):
         track_data = {}
         accessors = get_soundcloud_accessors(self.context)
         for iface, accessor in accessors:
@@ -49,6 +49,10 @@ class SoundcloudUploaderView(BrowserView):
                 )
             elif not isinstance(track_data[accessor], basestring):
                 track_data[accessor] = str(track_data[accessor])
+        # artwork image!
+        image = getattr(self.context, 'image', None)
+        if image is not None:
+            track_data['artwork_data'] = StringIO(image.data)
         return track_data
 
     def _notify(self, mode):
