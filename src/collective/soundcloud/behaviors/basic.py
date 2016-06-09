@@ -43,13 +43,13 @@ class ISoundCloudBasic(model.Schema):
         vocabulary='soundcloud.download'
     )
 
-    omitted('trackdata')
+    #omitted('trackdata')
     trackdata = schema.Text(
         title=_(u'label_trackdata', default=u'Soundcloud Track Data'),
         required=False,
     )
 
-    omitted('soundcloud_id')
+    #omitted('soundcloud_id')
     soundcloud_id = schema.Text(
         title=_(u'label_soundcloud_id', default=u'Soundcloud ID'),
         required=False,
