@@ -61,7 +61,7 @@ class SoundcloudUploaderView(BrowserView):
         setattr(
             self.context,
             'trackdata',
-            json.dumps(track_data, sort_keys=True, indent=4)
+            json.dumps(dict(track_data), sort_keys=True, indent=4)
         )
         setattr(self.context, 'soundcloud_id', track_data['id'])
         self.context._p_changed = 1

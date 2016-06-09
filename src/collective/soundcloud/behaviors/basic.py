@@ -95,3 +95,19 @@ class SoundCloudBasic(object):
     @downloadable.setter
     def downloadable(self, value):
         self.context.downloadable = value
+
+    @property
+    def trackdata(self):
+        return self.context.trackdata
+
+    @trackdata.setter
+    def trackdata(self, value):
+        self.context.trackdata = value
+
+    @property
+    def soundcloud_id(self):
+        return self.context.soundcloud_id
+
+    @soundcloud_id.setter
+    def soundcloud_id(self, value):
+        self.context.soundcloud_id = value
