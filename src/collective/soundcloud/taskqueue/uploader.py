@@ -4,6 +4,7 @@ from collective.soundcloud.directives import get_soundfile_field
 from collective.soundcloud.events import SoundcloudCreatedEvent
 from collective.soundcloud.events import SoundcloudModifiedEvent
 from collective.soundcloud.settings import get_soundcloud_settings
+from persistent.dict import PersistentDict
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five import BrowserView
 from StringIO import StringIO
@@ -57,7 +58,7 @@ class SoundcloudUploaderView(BrowserView):
             notify(SoundcloudCreatedEvent(self.context))
 
     def _save(self, track_data):
-        setattr(self.context, 'trackdata', track_data)
+        setattr(self.context, 'trackdata', PersistentDict(track_data))
         setattr(self.context, 'soundcloud_id', track_data['id'])
         self.context._p_changed = 1
 
