@@ -18,15 +18,15 @@
     permission="cmf.ModifyPortalContent"
   />
 
-  <subscriber
+  <!-- <subscriber
     for="collective.soundcloud.behaviors.basic.ISoundCloudBasicMarker
          zope.lifecycleevent.interfaces.IObjectAddedEvent"
     handler=".addedit.soundcloud_add"
-  />
-  <subscriber
+  /> -->
+  <!-- <subscriber
     for="collective.soundcloud.behaviors.basic.ISoundCloudBasicMarker
          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".addedit.soundcloud_modified"
-  />
+  /> -->
 
 </configure>
